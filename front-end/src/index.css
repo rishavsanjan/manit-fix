@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+
+@theme {
+  /* Keyframes */
+  --animate-gradient: gradient 15s ease infinite;
+  
+  /* Background sizes */
+  --size-400: 400% 400%;
+  
+  /* Background images */
+  --gradient-animated: linear-gradient(-45deg, #4f46e5, #9333ea, #6366f1, #3b82f6);
+}
+
+/* Define the keyframe animation */
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
