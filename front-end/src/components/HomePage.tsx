@@ -19,11 +19,14 @@ export default function HomePage() {
                             <button className="bg-white text-purple-400 rounded-full p-3 px-5
                      font-medium hover:-translate-y-1 transition-all duration-300 cursor-pointer">Report an issue</button>
                         </Link>
-
-                        <button className="bg-transparent rounded-full p-3 px-5 font-medium
+                        <Link to='/posts'>
+                            <button className="bg-transparent rounded-full p-3 px-5 font-medium
                      hover:bg-white hover:text-purple-400 text-white
                      transition-all duration-300 border-white border-2 hover:-translate-y-1 cursor-pointer
-                     ">Browse issues</button>
+                     ">Browse issues
+                            </button>
+                        </Link>
+
                     </div>
                 </div>
 
@@ -34,9 +37,9 @@ export default function HomePage() {
             </div>
             <div className="flex sm:flex-row flex-col flex-wrap justify-between mt-20 mb-20">
                 {
-                    featuresData.map((item) => {
+                    featuresData.map((item, index) => {
                         return (
-                            <div className="flex flex-col m-4 p-4  shadow-xl
+                            <div key={index} className="flex flex-col m-4 p-4  shadow-xl
                              hover:backdrop-blur-3xl hover:-translate-y-2 transition-all
                               duration-300  rounded-xl gap-4 border border-gray-200  xl:w-96 lg:w-80 sm:w-72  ">
                                 <div className="bg-purple-500 p-2 self-start  rounded-lg">
@@ -73,7 +76,9 @@ export default function HomePage() {
             animate-[animation:var(--animate-gradient)] flex items-center py-20 flex-col gap-6">
                 <h1 className="text-4xl font-extrabold text-white">Ready to Fix Your Campus?</h1>
                 <p className="text-white">Join thousands of students who are already making their voices heard</p>
-                <button className="text-purple-400 bg-white px-6 py-2 rounded-full transition-all duration-300 hover:-translate-y-2">Start reporting today</button>
+                <Link to="/login">
+                    <button className="text-purple-400 bg-white px-6 py-2 rounded-full transition-all duration-300 hover:-translate-y-2">Start reporting today</button>
+                </Link>
             </div>
         </div>
 

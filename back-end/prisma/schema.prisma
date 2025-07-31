@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  name      String
+  picture   String?
+  googleId  String    @unique
+  Posts     Posts[]
+  createdAt DateTime? @default(now())
+  Vote      Vote[]
+  Comment   Comment[]
+}
+
+model Posts {
+  id          String    @id @default(uuid())
+  title       String
+  description String
+  location    String
+  catogery    String
+  image       String?
+  userId      String
+  status      Status    @default(Pending)
+  user        User      @relation(fields: [userId], references: [id])
+  Vote        Vote[]
+  Comment     Comment[]
+  createdAt   DateTime  @default(now())
+}
+
+enum Status {
+  Pending
+  Resolved
+  InProgress
+}
+
+model Vote {
+  id        String   @id @default(uuid())
+  type      VoteType
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  postId    String
+  post      Posts    @relation(fields: [postId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([postId, userId])
+}
+
+enum VoteType {
+  UpVote
+  DownVote
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  text      String
+  createdAt DateTime @default(now())
+
+  post   Posts  @relation(fields: [postId], references: [id])
+  postId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
