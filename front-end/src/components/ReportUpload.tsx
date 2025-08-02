@@ -11,6 +11,7 @@ export default function ReportUpload() {
     const [image, setImage] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
 
+
     const uploadToCloudinary = async (file: File) => {
         const data = new FormData();
         data.append('file', file);
@@ -83,20 +84,20 @@ export default function ReportUpload() {
                         <input required type="text" placeholder="Brief description of the issue"
                             className="w-full p-3 border-2 rounded-xl border-gray-300 font-medium focus:border-blue-500
                             outline-none transition-colors duration-300 text-sm bg-gray-100
-                            " onChange={e => { setTitle(e.target.value) }} value={title}  />
+                            " onChange={e => { setTitle(e.target.value) }} value={title} />
                     </div>
                     <div className="bg-white p-8 gap-2 flex-col flex">
                         <h1 className="flex-row flex font-medium text-sm">Description <p className="text-red-500">*</p></h1>
                         <textarea required placeholder="Provide detailed information about the issue, when you noticed it, and any other relevant details..."
                             className="w-full p-2 border-2 rounded-xl border-gray-300 font-medium focus:border-blue-500
                             outline-none transition-colors duration-300 h-32 bg-gray-100
-                            " onChange={e => { setDescription(e.target.value) }} value={description}  />
+                            " onChange={e => { setDescription(e.target.value) }} value={description} />
                     </div>
                     <div className="bg-white p-8 gap-2 flex-col flex">
                         <h1 className="flex-row flex font-medium text-sm">Catogery <p className="text-red-500">*</p></h1>
                         <select required
                             className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 outline-none transition-colors duration-300"
-                            defaultValue="" onChange={e => { setCatogery(e.target.value) }} value={catogery} 
+                            defaultValue="" onChange={e => { setCatogery(e.target.value) }} value={catogery}
                         >
                             <option value="" disabled>
                                 Select an catogery
@@ -138,7 +139,8 @@ export default function ReportUpload() {
                         <button type="submit" className="bg-blue-500 text-white p-2 rounded-2xl bg-gradient-to-r from-blue-400
                          to-blue-600 hover:bg-gradient-to-r hover:from-[#6068F1] hover:to-[#8936EA] 
                          transition-colors duration-1000 cursor-pointer
-                         ">  {loading ? <div className="items-center justify-center flex gap-1"><ClipLoader color="#fff" size={20} /> Uploading...</div> : "Submit"}</button>
+                         ">  {loading ? <div className="items-center justify-center flex gap-1"><ClipLoader color="#fff" size={20} /> Uploading...</div> : "Submit"}
+                        </button>
                     </div>
                 </form>
 

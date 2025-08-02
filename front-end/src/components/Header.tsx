@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Profile {
     email: string,
@@ -10,8 +10,15 @@ interface Profile {
 }
 
 export default function Header() {
+    const navigate = useNavigate();
     const [authenticated, setAuthenticate] = useState(false);
     const [user, setUser] = useState<Profile | null>(null);
+
+    const handleLogout = async () => {
+        localStorage.removeItem('token');
+        setAuthenticate(false);
+        navigate('/');
+    }
 
     const getUser = async () => {
         const token = localStorage.getItem('token');
@@ -37,7 +44,7 @@ export default function Header() {
     }, []);
 
     return (
-        <div className="flex flex-row justify-between px-4">
+        <div className="flex flex-row justify-between px-4 p-4 border-b border-gray-200 ">
             <div className="flex-row flex items-center gap-2">
                 <img className="w-7 h-7" src="https://img.icons8.com/?size=100&id=49454&format=png&color=000000"></img>
                 <Link to='/'>
@@ -45,7 +52,7 @@ export default function Header() {
                 </Link>
 
             </div>
-            <div className="flex flex-row gap-12 items-center py-2">
+            <div className="md:flex  flex-row gap-12 hidden  items-center py-2">
                 <h1 className="text-gray-500">Features</h1>
                 <h1 className="text-gray-500">About</h1>
                 <h1 className="text-gray-500">Contact</h1>
@@ -62,6 +69,12 @@ export default function Header() {
                         }
                     </>
 
+                }
+                {
+                    authenticated &&
+                    <button onClick={handleLogout} className="bg-red-500 px-3 p-1 rounded-xl text-white cursor-pointer">
+                        Logout
+                    </button>
                 }
 
             </div>

@@ -6,6 +6,7 @@ import HomePage from "./components/HomePage"
 import ReportUpload from "./components/ReportUpload";
 import Login from "./components/Login"
 import Posts from "./components/Posts";
+import PostDetail from "./components/PostDetail";
 function App() {
 
   function AppContent() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/posts" element={<Posts/>} />
+          <Route path="/posts/:postId" element={<PostDetail/>} />
         </Routes>
       </>
 

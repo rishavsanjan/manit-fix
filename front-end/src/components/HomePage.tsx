@@ -9,8 +9,8 @@ export default function HomePage() {
                 bg-[size:var(--size-400)]
                 animate-[animation:var(--animate-gradient)]">
                 <div className="flex flex-col h-full items-center justify-center gap-4">
-                    <h1 className="text-5xl  text-white font-extrabold text-center">Your Voice, Your Campus</h1>
-                    <p className="text-white text-lg font-normal text-center ">Report campus issues, track progress,
+                    <h1 className="text-5xl  text-white font-extrabold text-center">Your Campus, Your Voice</h1>
+                    <p className="text-white text-lg font-normal text-center p-4">Report campus issues, track progress,
                         vote on priorities, and hold administration accountable. Join thousands
                         of students making their campus better.</p>
 
@@ -35,7 +35,7 @@ export default function HomePage() {
                 <h1 className="font-extrabold text-4xl text-[#1E293B]">How it Works</h1>
                 <p className="text-gray-500 text-lg text-center">Simple, powerful tools to transform your campus experience</p>
             </div>
-            <div className="flex sm:flex-row flex-col flex-wrap justify-between mt-20 mb-20">
+            <div className="flex sm:flex-row flex-col flex-wrap justify-between sm:mt-20 mt-4 mb-20">
                 {
                     featuresData.map((item, index) => {
                         return (
@@ -74,8 +74,8 @@ export default function HomePage() {
             bg-[image:var(--gradient-animated)]
             bg-[size:var(--size-400)]
             animate-[animation:var(--animate-gradient)] flex items-center py-20 flex-col gap-6">
-                <h1 className="text-4xl font-extrabold text-white">Ready to Fix Your Campus?</h1>
-                <p className="text-white">Join thousands of students who are already making their voices heard</p>
+                <h1 className="text-4xl font-extrabold text-white text-center">Ready to Fix Your Campus?</h1>
+                <p className="text-white text-center">Join thousands of students who are already making their voices heard</p>
                 <Link to="/login">
                     <button className="text-purple-400 bg-white px-6 py-2 rounded-full transition-all duration-300 hover:-translate-y-2">Start reporting today</button>
                 </Link>

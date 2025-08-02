@@ -8,30 +8,32 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  email     String    @unique
-  name      String
-  picture   String?
-  googleId  String    @unique
-  Posts     Posts[]
-  createdAt DateTime? @default(now())
-  Vote      Vote[]
-  Comment   Comment[]
+  id               String             @id @default(uuid())
+  email            String             @unique
+  name             String
+  picture          String?
+  googleId         String             @unique
+  Posts            Posts[]
+  createdAt        DateTime?          @default(now())
+  Vote             Vote[]
+  Comment          Comment[]
+  CommentReactions CommentReactions[]
 }
 
 model Posts {
-  id          String    @id @default(uuid())
-  title       String
-  description String
-  location    String
-  catogery    String
-  image       String?
-  userId      String
-  status      Status    @default(Pending)
-  user        User      @relation(fields: [userId], references: [id])
-  Vote        Vote[]
-  Comment     Comment[]
-  createdAt   DateTime  @default(now())
+  id               String             @id @default(uuid())
+  title            String
+  description      String
+  location         String
+  catogery         String
+  image            String?
+  userId           String
+  status           Status             @default(Pending)
+  user             User               @relation(fields: [userId], references: [id])
+  Vote             Vote[]
+  Comment          Comment[]
+  createdAt        DateTime           @default(now())
+  CommentReactions CommentReactions[]
 }
 
 enum Status {
@@ -65,6 +67,28 @@ model Comment {
   post   Posts  @relation(fields: [postId], references: [id])
   postId String
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
+  user             User               @relation(fields: [userId], references: [id])
+  userId           String
+  parentId         String?
+  parent           Comment?           @relation("CommentReplies", fields: [parentId], references: [id])
+  replies          Comment[]          @relation("CommentReplies")
+  CommentReactions CommentReactions[]
+}
+
+model CommentReactions {
+  id        String              @id @default(uuid())
+  type      CommentReactionType
+  createdAt DateTime            @default(now())
+  commentId String
+  comment   Comment             @relation(fields: [commentId], references: [id])
+  userId    String
+  User      User                @relation(fields: [userId], references: [id])
+  postId    String
+  post      Posts               @relation(fields: [postId], references: [id])
+
+  @@unique([commentId, userId])
+}
+
+enum CommentReactionType {
+  like
 }
