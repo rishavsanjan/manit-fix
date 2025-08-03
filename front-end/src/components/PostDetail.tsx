@@ -60,7 +60,6 @@ export default function PostDetail() {
         id: string
         picture: string
     } | null>(null);
-    const [viewReply, setViewReply] = useState(false);
     const [repliesData, setRepliesData] = useState<Comment[]>([]);
     const [renderReplyActive, setRenderReplyActive] = useState<string[]>([]);
     const [replyText, setReplyText] = useState('');
@@ -149,7 +148,6 @@ export default function PostDetail() {
         setRepliesData(prev => [...prev, response.data.replies])
 
         setRenderReplyActive(prev => [...prev, parentId]);
-        setViewReply(true)
 
 
     }
@@ -191,6 +189,7 @@ export default function PostDetail() {
                 postId, commentId
             }
         })
+        console.log(response.data)
 
         const updatedComment = {
             commentId: commentId,

@@ -32,7 +32,7 @@ interface Comment {
 
 export default function Posts() {
     const [posts, setPosts] = useState<Posts[]>([]);
-    const [page, setPage] = useState(0);
+  //  const [page, setPage] = useState(0);
     const [filter, setFilter] = useState('All Issues');
     const [likeHover, setLikeHoverHover] = useState<{
         id: string
@@ -41,7 +41,7 @@ export default function Posts() {
         id: string
     } | null>(null);
     const [isActive, setIsActive] = useState('All Issues');
-    const [loading, setLoading] = useState(false);
+   // const [loading, setLoading] = useState(false);
 
     const filterOptions = [
         {
@@ -88,7 +88,7 @@ export default function Posts() {
 
     const getPosts = async () => {
         const token = localStorage.getItem('token');
-        const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/getposts?skip=${page * 10}&take=10&type=${filter}`, {
+        const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/getposts?skip=${0 * 10}&take=10&type=${filter}`, {
             method: 'get',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -140,6 +140,7 @@ export default function Posts() {
                     vote, postId
                 }
             })
+            console.log(response.data)
 
             setPosts(prevPosts =>
                 prevPosts.map((post) => {
@@ -172,6 +173,7 @@ export default function Posts() {
                 postId
             }
         });
+        console.log(response.data)
         setPosts(prevPosts =>
             prevPosts.map(post => {
                 if (post.id !== postId) return post;
@@ -208,6 +210,8 @@ export default function Posts() {
                 postId
             }
         });
+
+        console.log(response.data)
         setPosts(prevPosts =>
             prevPosts.map(post => {
                 if (post.id !== postId) return post;
