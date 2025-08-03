@@ -1,10 +1,21 @@
 import { featuresData } from "../utils/homepageHelpData"
 import { Link } from "react-router-dom";
+import 'aos/dist/aos.css';
+//@ts-ignore
+import AOS from 'aos';
+import { useEffect } from "react";
 
 export default function HomePage() {
+    useEffect(() => {
+        AOS.init({
+            duration: 600,
+            easing: 'ease-out-cubic',
+            once: false,
+        });
+    }, []);
     return (
-        <div className="">
-            <div className="h-[500px] w-full
+        <div data-aos="slide-up"  className="">
+            <div   className="h-[500px] w-full
                 bg-[image:var(--gradient-animated)]
                 bg-[size:var(--size-400)]
                 animate-[animation:var(--animate-gradient)]">
@@ -39,7 +50,7 @@ export default function HomePage() {
                 {
                     featuresData.map((item, index) => {
                         return (
-                            <div key={index} className="flex flex-col m-4 p-4  shadow-xl
+                            <div data-aos="slide-up" key={index} className="flex flex-col m-4 p-4  shadow-xl
                              hover:backdrop-blur-3xl hover:-translate-y-2 transition-all
                               duration-300  rounded-xl gap-4 border border-gray-200  xl:w-96 lg:w-80 sm:w-72  ">
                                 <div className="bg-purple-500 p-2 self-start  rounded-lg">

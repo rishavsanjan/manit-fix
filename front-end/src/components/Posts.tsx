@@ -34,8 +34,12 @@ export default function Posts() {
     const [posts, setPosts] = useState<Posts[]>([]);
     const [page, setPage] = useState(0);
     const [filter, setFilter] = useState('All Issues');
-    const [likeHover, setLikeHoverHover] = useState(false);
-    const [dislikeHover, setDislikeHover] = useState(false);
+    const [likeHover, setLikeHoverHover] = useState<{
+        id: string
+    } | null>(null);
+    const [dislikeHover, setDislikeHover] = useState<{
+        id: string
+    } | null>(null);
     const [isActive, setIsActive] = useState('All Issues');
     const [loading, setLoading] = useState(false);
 
@@ -222,9 +226,9 @@ export default function Posts() {
     console.log(posts)
 
     return (
-        <div className="bg-gray-50 mt-16">
+        <div className="bg-gray-50 pt-16">
             <div className="flex flex-col gap-4 mb-8">
-                <h1 className="text-5xl  text-purple-400 font-extrabold text-center">Campus Issues</h1>
+                <h1 className="sm:text-5xl text-4xl  text-purple-400 font-extrabold text-center">Campus Issues</h1>
                 <p className="text-gray-500 text-center text-lg">Community-reported issues across campus • Vote to prioritize • Track progress</p>
             </div>
             <div className="flex flex-row p-4  m-4   xl:px-[300px] lg:px-60 md:px-24  flex-wrap ">
@@ -246,109 +250,122 @@ export default function Posts() {
                 }
             </div>
 
-            <div className="p-4  m-4 gap-8 flex flex-col xl:px-[300px] lg:px-60 md:px-24 px-4">
+            <div className=" p-2 gap-8 flex flex-col xl:px-[300px] lg:px-60 md:px-24 ">
                 {
                     posts?.map((item, index) => {
                         return (
-                            <Link key={index} to={`/posts/${item.id}`}>
-                                <div data-aos="fade-up" key={index} className="flex cursor-pointer flex-col gap-2 mb-4 border border-gray-200 shadow-2xl rounded-xl p-4 ">
-                                    <h1 className="text-black text-xl font-medium ">{item.title}</h1>
-                                    <div className="flex-row flex items-center gap-4 justify-between">
-                                        <div className="flex-row flex gap-2">
-                                            <div className="bg-green-200 border border-green-400 rounded-full px-4 p-1">
-                                                <h1 className="text-green-500 font-medium text-sm">{item.catogery}</h1>
+                            <div data-aos="fade-up" key={index} className="flex cursor-pointer flex-col gap-2 mb-4 border border-gray-200 shadow-2xl rounded-xl sm:p-4 p-2">
+                                <Link key={index} to={`/posts/${item.id}`}>
+                                    <div className="flex flex-col gap-2">
+                                        <div className="flex flex-row justify-between items-center">
+                                            <h1 className="text-black text-xl font-medium ">{item.title}</h1>
+                                            <div className="bg-red-200 border border-red-400 rounded-full px-3 p-0.5 items-center">
+                                                <h1 className="text-red-500 font-medium text-sm ">{item.status}</h1>
                                             </div>
-                                            <h1 className="text-gray-500">📍{item.location}</h1>
-                                            <h1 className="text-gray-500">{formatTimeAgo(item.createdAt)}</h1>
                                         </div>
-                                        <div className="bg-red-200 border border-red-400 rounded-full px-4 p-1">
-                                            <h1 className="text-red-500 font-medium text-sm">{item.status}</h1>
-                                        </div>
+                                        <div className="flex-row flex items-center gap-4 justify-between">
+                                            <div className="flex-row flex gap-2">
+                                                <div className="bg-green-200 border border-green-400 rounded-full px-3 p-0.5">
+                                                    <h1 className="text-green-500 font-medium text-sm">{item.catogery}</h1>
+                                                </div>
+                                                <h1 className="text-gray-500">📍{item.location}</h1>
+                                                <h1 className="text-gray-500">{formatTimeAgo(item.createdAt)}</h1>
+                                            </div>
 
+
+                                        </div>
+                                        <p className="text-gray-500">{item.description}</p>
+                                        <img className="w-full " src={item.image}></img>
                                     </div>
-                                    <p className="text-gray-500">{item.description}</p>
-                                    <img className="w-full " src={item.image}></img>
-                                    <div className="bg-[#FAFBFC] flex-row flex items-center justify-between ">
-                                        <div className="flex-row flex items-center gap-4">
-                                            {
-                                                item.votes.userReaction === 'UpVote' &&
-                                                <button className="cursor-pointer" onClick={() => { removeVote('UpVote', item.id) }}>
-                                                    <div className="bg-green-500 border-2 border-gray-400  rounded-lg p-2 duration-300 transition-all hover:-translate-y-1">
-                                                        <img className="w-5 h-5" src="https://img.icons8.com/?size=100&id=pv7WFzr1v33d&format=png&color=FFFFFF"></img>
-                                                    </div>
-                                                </button>
-                                            }
-                                            {<button
 
-                                                onClick={() => { addVote('UpVote', item.id, item.votes.userReaction) }}
-                                                className="cursor-pointer" onMouseEnter={() => setLikeHoverHover(true)}
-                                                onMouseLeave={() => setLikeHoverHover(false)}>
-                                                {
-                                                    item.votes.userReaction !== 'UpVote'
-                                                    &&
-                                                    <>
-                                                        {
-                                                            likeHover
-                                                                ?
-                                                                <div className="bg-green-500 border-2 border-gray-400  rounded-lg p-2 duration-300 transition-all hover:-translate-y-1">
-                                                                    <img className="w-5 h-5" src="https://img.icons8.com/?size=100&id=pv7WFzr1v33d&format=png&color=FFFFFF"></img>
-                                                                </div>
+                                </Link>
 
-                                                                :
-                                                                <div className=" border-2 border-gray-400 bg-white rounded-lg p-2 duration-300  transition-all hover:-translate-y-1">
-                                                                    <img className="w-5 h-5" src="https://img.icons8.com/?size=100&id=1DXLLAyIsNYu&format=png&color=1A1A1A"></img>
-                                                                </div>
-                                                        }
-                                                    </>
-
-                                                }
-
-                                            </button>}
-                                            <h1 className="text-2xl text-gray-400 font-bold">{item.votes.upvote - item.votes.downvote}</h1>
-
-                                            {
-                                                item.votes.userReaction === 'DownVote' &&
-                                                <button className="cursor-pointer" onClick={() => { removeVote('DownVote', item.id) }}>
-                                                    <div className="bg-red-500 border-2 border-gray-400  rounded-lg p-2 transition-all hover:-translate-y-1 duration-300">
-                                                        <img className="w-5 h-5" src="https://img.icons8.com/?size=100&id=94055&format=png&color=FFFFFF"></img>
-                                                    </div>
-                                                </button>
-                                            }
-                                            <button
-                                                onClick={() => { addVote('DownVote', item.id, item.votes.userReaction) }} className="cursor-pointer"
-                                                onMouseEnter={() => setDislikeHover(true)}
-                                                onMouseLeave={() => setDislikeHover(false)}>
-                                                {
-                                                    item.votes.userReaction !== 'DownVote'
-                                                    &&
-                                                    <>
-                                                        {
-                                                            dislikeHover ?
-                                                                <div className="bg-red-500 border-2 border-gray-400  rounded-lg p-2 transition-all hover:-translate-y-1 duration-300">
-                                                                    <img className="w-5 h-5" src="https://img.icons8.com/?size=100&id=94055&format=png&color=FFFFFF"></img>
-                                                                </div>
-
-                                                                :
-                                                                <div className=" border-2 border-gray-400 bg-white rounded-lg p-2 transition-all hover:-translate-y-1 duration-300">
-                                                                    <img className="w-5 h-5" src="https://img.icons8.com/?size=100&id=94055&format=png&color=1A1A1A"></img>
-                                                                </div>
-                                                        }
-                                                    </>
-                                                }
+                                <div className="bg-[#FAFBFC] flex-row flex items-center justify-between ">
+                                    <div className="flex-row flex items-center gap-4">
+                                        {
+                                            item.votes.userReaction === 'UpVote' &&
+                                            <button className="cursor-pointer" onClick={() => { removeVote('UpVote', item.id) }}>
+                                                <div className="bg-green-500 border-2 border-gray-400  rounded-lg p-2 duration-300 transition-all hover:-translate-y-1">
+                                                    <img className="sm:w-5 sm:h-5 w-3 h-3 " src="https://img.icons8.com/?size=100&id=pv7WFzr1v33d&format=png&color=FFFFFF"></img>
+                                                </div>
                                             </button>
-                                        </div>
+                                        }
+                                        {<button
 
-                                        <div className="flex flex-row gap-2">
-                                            <img className="w-8 h-8" src="https://img.icons8.com/?size=100&id=81488&format=png&color=000000" alt="" />
-                                            <h1 className="text-xl font-medium">{item.Comment.length} comments</h1>
-                                        </div>
+                                            onClick={() => { addVote('UpVote', item.id, item.votes.userReaction) }}
+                                            className="cursor-pointer" onMouseEnter={() => setLikeHoverHover({ id: item.id })}
+                                            onMouseLeave={() => setLikeHoverHover(null)}>
+                                            {
+                                                item.votes.userReaction !== 'UpVote'
+                                                &&
+                                                <>
+                                                    {
+                                                        likeHover?.id === item.id
+                                                            ?
+                                                            <div className="bg-green-500 border-2 border-gray-400  rounded-lg p-2 duration-300 transition-all hover:-translate-y-1">
+                                                                <img className="sm:w-5 sm:h-5 w-3 h-3" src="https://img.icons8.com/?size=100&id=pv7WFzr1v33d&format=png&color=FFFFFF"></img>
+                                                            </div>
 
+                                                            :
+                                                            <div className=" border-2 border-gray-400 bg-white rounded-lg p-2 duration-300  transition-all hover:-translate-y-1">
+                                                                <img className="sm:w-5 sm:h-5 w-3 h-3" src="https://img.icons8.com/?size=100&id=1DXLLAyIsNYu&format=png&color=1A1A1A"></img>
+                                                            </div>
+                                                    }
+                                                </>
+
+                                            }
+
+                                        </button>}
+                                        <h1 className="text-2xl text-gray-400 font-bold">{item.votes.upvote - item.votes.downvote}</h1>
+
+                                        {
+                                            item.votes.userReaction === 'DownVote' &&
+                                            <button className="cursor-pointer" onClick={() => { removeVote('DownVote', item.id) }}>
+                                                <div className="bg-red-500 border-2 border-gray-400  rounded-lg p-2 transition-all hover:-translate-y-1 duration-300">
+                                                    <img className="sm:w-5 sm:h-5 w-3 h-3" src="https://img.icons8.com/?size=100&id=94055&format=png&color=FFFFFF"></img>
+                                                </div>
+                                            </button>
+                                        }
+                                        <button
+                                            onClick={() => { addVote('DownVote', item.id, item.votes.userReaction) }} className="cursor-pointer"
+                                            onMouseEnter={() => setDislikeHover({ id: item.id })}
+                                            onMouseLeave={() => setDislikeHover(null)}>
+                                            {
+                                                item.votes.userReaction !== 'DownVote'
+                                                &&
+                                                <>
+                                                    {
+                                                        dislikeHover?.id === item.id ?
+                                                            <div className="bg-red-500 border-2 border-gray-400  rounded-lg p-2 transition-all hover:-translate-y-1 duration-300">
+                                                                <img className="sm:w-5 sm:h-5 w-3 h-3" src="https://img.icons8.com/?size=100&id=94055&format=png&color=FFFFFF"></img>
+                                                            </div>
+
+                                                            :
+                                                            <div className=" border-2 border-gray-400 bg-white rounded-lg p-2 transition-all hover:-translate-y-1 duration-300">
+                                                                <img className="sm:w-5 sm:h-5 w-3 h-3" src="https://img.icons8.com/?size=100&id=94055&format=png&color=1A1A1A"></img>
+                                                            </div>
+                                                    }
+                                                </>
+                                            }
+                                        </button>
                                     </div>
+
+                                    <div className="flex flex-row gap-1 items-center">
+                                        <img className="sm:w-8 sm:h-8 w-h-3.5 h-3.5 mt-0.5" src="https://img.icons8.com/?size=100&id=81488&format=png&color=000000" alt="" />
+                                        <h1 className="sm:text-xl text-sm font-medium text-gray-600">{item.Comment.length} comments</h1>
+                                    </div>
+
                                 </div>
-                            </Link>
+                            </div>
 
                         )
                     })
+                }
+                {
+                    posts.length === 0 &&
+                    <div className="h-screen">
+                        <h1 className="text-center text-xl text-gray-500 font-bold">No issues found!</h1>
+                    </div>
                 }
             </div>
         </div >

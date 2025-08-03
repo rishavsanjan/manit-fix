@@ -462,15 +462,15 @@ export default function PostDetail() {
                                     const isLiked = item.CommentReactions.find(obj => { if (obj.userId === userId && obj.type === 'like') return true });
                                     console.log(isLiked)
                                     return (
-                                        <div key={index} className="flex flex-col p-4">
+                                        <div key={index} className="flex flex-col sm:p-4 p-2">
                                             <div className="flex flex-row items-center gap-4">
                                                 <img className="w-10 h-10 rounded-full mb-4 border-gray-300 border-2 " src={item.user.picture} alt="" />
                                                 <div className=" flex flex-col ">
                                                     <div className={`${rootReply?.id === item.id ? 'bg-blue-300' : 'bg-gray-300'}  p-2 rounded-3xl px-4`}>
-                                                        <h1 className="font-medium">{item.user.name}</h1>
-                                                        <h1>{item.text}</h1>
+                                                        <h1 className="sm:text-md text-sm font-medium">{item.user.name}</h1>
+                                                        <h1 className="sm:text-md text-sm">{item.text}</h1>
                                                     </div>
-                                                    <div className="gap-4 flex flex-row justify-between ml-4">
+                                                    <div className="gap-4 flex flex-row justify-between ">
                                                         <div className="flex flex-row gap-4">
                                                             <button onClick={() => { handleRemoveLike(item.id) }} className={`${isLiked ? 'text-blue-500' : 'text-gray-700'}  hover:underline cursor-pointer`}>{isLiked && 'Unlike'} </button>
                                                             <button onClick={() => { handleLike(item.id) }} className={`${isLiked ? 'text-blue-500' : 'text-gray-700'}  hover:underline cursor-pointer`}>{!isLiked && 'Like'} </button>                                                            <button onClick={() => setRootReply({

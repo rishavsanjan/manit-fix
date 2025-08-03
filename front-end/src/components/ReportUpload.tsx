@@ -126,8 +126,8 @@ export default function ReportUpload() {
                         <div className="border border-dashed items-center rounded-xl flex flex-col p-8 gap-4">
                             <span className="text-5xl select-none">📷</span>
                             <p>
-                                <input type="file" accept="image/*" placeholder="Click to upload"
-                                    className="cursor-pointer text-blue-600 underline text-center
+                                <input type="file" accept="image/*"  
+                                    className="cursor-pointer text-blue-600 underline text-center pl-24
                             "           onChange={e => setImage(e.target.files?.[0] ?? null)}
                                 />
                             </p>

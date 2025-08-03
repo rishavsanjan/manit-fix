@@ -25,6 +25,11 @@ app.use('*', cors({
 
 const JWT_SECRET = 'rishav';
 
+app.get('/hello', (c) => {
+  return c.text('Hello from Hono + Cloudflare Workers!')
+})
+
+
 
 app.post('/google', async (c) => {
   const prisma = getPrisma(c.env.DATABASE_URL);
