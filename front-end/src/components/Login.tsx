@@ -10,7 +10,7 @@ export default function Login() {
         const decodedUser: any = jwtDecode(credentialResponse.credential);
         console.log("Decoded Google User:", decodedUser);
 
-        const response = await axios.post('http://127.0.0.1:8787/google', decodedUser, {
+        const response = await axios.post('https://fixmycampus.movieapi-backend.workers.dev/google', decodedUser, {
             headers: {
                 'Content-Type': 'application/json'
             }

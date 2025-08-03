@@ -43,7 +43,7 @@ export default function ReportUpload() {
         console.log(postPicUrl)
 
         const token = localStorage.getItem('token');
-        const response = await axios(`http://127.0.0.1:8787/protected/upload-post`, {
+        const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/upload-post`, {
             method: 'post',
             headers: {
                 'Authorization': 'Bearer ' + token
