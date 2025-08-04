@@ -95,6 +95,7 @@ export default function Posts() {
                     'Authorization': 'Bearer ' + token
                 }
             })
+            console.log(response.data)
             setPosts(response.data.response)
         } else {
             const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/getposts?skip=${0 * 10}&take=10&type=${filter}`, {
@@ -104,6 +105,7 @@ export default function Posts() {
                 }
             })
             setPosts(response.data.response)
+            console.log(response.data)
         }
     }
 
@@ -135,6 +137,8 @@ export default function Posts() {
 
         return 'just now';
     }
+
+    
 
 
     const addVote = async (vote: 'UpVote' | 'DownVote', postId: string, currentReaction: 'UpVote' | 'DownVote' | null) => {
