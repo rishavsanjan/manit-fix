@@ -17,11 +17,12 @@ const app = new Hono<{
   }
 }>()
 
-app.use('*', cors({
-  origin: 'http://localhost:5173',
+app.use(cors({
+  origin: 'https://71693bfc.manit-fix.pages.dev',
   allowHeaders: ['Content-Type', 'Authorization'],
   allowMethods: ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE']
 }))
+
 
 const JWT_SECRET = 'rishav';
 
@@ -311,6 +312,228 @@ app.get('/protected/getposts', async (c) => {
   //@ts-ignore
   return c.json({ posts, votes, response })
 })
+
+app.get('/getposts', async (c) => {
+  const prisma = getPrisma(c.env.DATABASE_URL);
+
+  //@ts-ignore
+  const skip = parseInt(c.req.query('skip') || '0');
+  const take = parseInt(c.req.query('take') || '10');
+  const filter = c.req.query('type');
+
+  //@ts-ignore
+  let posts = [];
+
+
+  if (filter === 'All Issues') {
+    posts = await prisma.posts.findMany({
+      skip,
+      take,
+      include: {
+        user: {
+          select: {
+            name: true,
+            picture: true
+          }
+        },
+        Comment: {
+          select: {
+            id: true
+          }
+        }
+      }
+    })
+  } else if (filter === 'Hostel') {
+    posts = await prisma.posts.findMany({
+      skip,
+      take,
+      where: {
+        catogery: 'hostel'
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            picture: true
+          }
+        },
+        Comment: {
+          select: {
+            id: true
+          }
+        }
+      }
+    })
+  } else if (filter === 'Mess') {
+    posts = await prisma.posts.findMany({
+      skip,
+      take,
+      where: {
+        catogery: 'mess'
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            picture: true
+          }
+        },
+        Comment: {
+          select: {
+            id: true
+          }
+        }
+      }
+    })
+  } else if (filter === 'Wi-Fi') {
+    posts = await prisma.posts.findMany({
+      skip,
+      take,
+      where: {
+        catogery: 'wi-fi'
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            picture: true
+          }
+        },
+        Comment: {
+          select: {
+            id: true
+          }
+        }
+      }
+    })
+  } else if (filter === 'Academic') {
+    posts = await prisma.posts.findMany({
+      skip,
+      take,
+      where: {
+        catogery: 'academic'
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            picture: true
+          }
+        },
+        Comment: {
+          select: {
+            id: true
+          }
+        }
+      }
+    })
+  } else if (filter === 'Pending') {
+    posts = await prisma.posts.findMany({
+      skip,
+      take,
+      where: {
+        status: 'Pending'
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            picture: true
+          }
+        },
+        Comment: {
+          select: {
+            id: true
+          }
+        }
+      }
+    })
+  } else if (filter === 'Resolved') {
+    posts = await prisma.posts.findMany({
+      skip,
+      take,
+      where: {
+        status: 'Resolved'
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            picture: true
+          }
+        },
+        Comment: {
+          select: {
+            id: true
+          }
+        }
+      }
+    })
+  } else if (filter === 'Transport') {
+    posts = await prisma.posts.findMany({
+      skip,
+      take,
+      where: {
+        catogery: 'transport'
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            picture: true
+          }
+        },
+        Comment: {
+          select: {
+            id: true
+          }
+        }
+      }
+    })
+  }
+
+
+  //@ts-ignore
+  const postIds = posts.map(p => p.id);
+  const votes = await prisma.vote.findMany({
+    where: { postId: { in: postIds } },
+    select: {
+      postId: true,
+      type: true,
+      userId: true
+    }
+  })
+
+  const voteMap: {
+    [postId: string]: {
+      upvote: number,
+      downvote: number,
+    }
+  } = {};
+
+  //@ts-ignore
+  for (const post of posts) {
+    voteMap[post.id] = { upvote: 0, downvote: 0 }
+  }
+
+  for (const r of votes) {
+    if (r.type === 'UpVote') voteMap[r.postId].upvote++
+    if (r.type === 'DownVote') voteMap[r.postId].downvote++
+  }
+
+  //@ts-ignore
+  const response = posts.map(post => ({
+    ...post,
+    votes: voteMap[post.id]
+  }))
+
+
+
+  //@ts-ignore
+  return c.json({ posts, votes, response })
+})
+
+
 
 app.post('/protected/addvote', async (c) => {
   const prisma = getPrisma(c.env.DATABASE_URL);
