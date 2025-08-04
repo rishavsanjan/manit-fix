@@ -18,7 +18,7 @@ const app = new Hono<{
 }>()
 
 app.use(cors({
-  origin: 'https://71693bfc.manit-fix.pages.dev',
+  origin: 'https://manit-fix.pages.dev',
   allowHeaders: ['Content-Type', 'Authorization'],
   allowMethods: ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE']
 }))
