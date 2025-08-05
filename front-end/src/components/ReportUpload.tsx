@@ -70,7 +70,7 @@ export default function ReportUpload() {
                 bg-[image:var(--gradient-animated)]
                 bg-[size:var(--size-400)]
                 animate-[animation:var(--animate-gradient)] items-center ">
-            <div className=" pt-20 xl:px-96 lg:px-60 md:px-24 px-4 ">
+            <div className=" pt-20 xl:px-96 lg:px-60 md:px-24 px-4 pb-12">
                 <div className=" w-full
                     bg-[image:var(--gradient-animated)]
                     bg-[size:var(--size-400)]
@@ -126,7 +126,7 @@ export default function ReportUpload() {
                         <div className="border border-dashed items-center rounded-xl flex flex-col p-8 gap-4">
                             <span className="text-5xl select-none">📷</span>
                             <p>
-                                <input type="file" accept="image/*"  
+                                <input type="file" accept="image/*"
                                     className="cursor-pointer text-blue-600 underline text-center pl-24
                             "           onChange={e => setImage(e.target.files?.[0] ?? null)}
                                 />
@@ -135,7 +135,7 @@ export default function ReportUpload() {
 
                         </div>
                     </div>
-                    <div className="bg-white p-8 gap-2 flex-col flex cursor-pointer">
+                    <div className="bg-white p-8 gap-2 flex-col flex cursor-pointer rounded-b-xl">
                         <button type="submit" className="bg-blue-500 text-white p-2 rounded-2xl bg-gradient-to-r from-blue-400
                          to-blue-600 hover:bg-gradient-to-r hover:from-[#6068F1] hover:to-[#8936EA] 
                          transition-colors duration-1000 cursor-pointer

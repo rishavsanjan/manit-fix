@@ -7,6 +7,9 @@ import ReportUpload from "./components/ReportUpload";
 import Login from "./components/Login"
 import Posts from "./components/Posts";
 import PostDetail from "./components/PostDetail";
+import Footer from "./components/Footer";
+import Features from "./components/Features";
+import MyProfile from "./components/MyProfile";
 function App() {
 
   function AppContent() {
@@ -17,9 +20,12 @@ function App() {
           <Route path="/report-upload" element={<ReportUpload />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/posts" element={<Posts/>} />
-          <Route path="/posts/:postId" element={<PostDetail/>} />
+          <Route path="/posts" element={<Posts />} />
+          <Route path="/posts/:postId" element={<PostDetail />} />
+          <Route path="/features" element={<Features />} />
+          <Route path="/my-profile" element={<MyProfile />} />
         </Routes>
+        <Footer />
       </>
 
     )

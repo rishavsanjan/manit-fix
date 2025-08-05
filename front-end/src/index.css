@@ -10,6 +10,7 @@
   
   /* Background images */
   --gradient-animated: linear-gradient(-45deg, #4f46e5, #9333ea, #6366f1, #3b82f6);
+  --gradient-animated-profile: linear-gradient(-45deg, #c04adb, #b85fcc, #c26ecc, #44d3e2);
 }
 
 /* Define the keyframe animation */

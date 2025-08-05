@@ -14,8 +14,8 @@ export default function HomePage() {
         });
     }, []);
     return (
-        <div data-aos="slide-up"  className="">
-            <div   className="h-[500px] w-full
+        <div data-aos="slide-up" className="">
+            <div className="h-[500px] w-full
                 bg-[image:var(--gradient-animated)]
                 bg-[size:var(--size-400)]
                 animate-[animation:var(--animate-gradient)]">
@@ -23,7 +23,8 @@ export default function HomePage() {
                     <h1 className="text-5xl  text-white font-extrabold text-center">Your Campus, Your Voice</h1>
                     <p className="text-white text-lg font-normal text-center p-4">Report campus issues, track progress,
                         vote on priorities, and hold administration accountable. Join thousands
-                        of students making their campus better.</p>
+                        of students making their campus better.
+                    </p>
 
                     <div className="flex gap-4">
                         <Link to='/report-upload'>
@@ -51,7 +52,7 @@ export default function HomePage() {
                     featuresData.map((item, index) => {
                         return (
                             <div data-aos="slide-up" key={index} className="flex flex-col m-4 p-4  shadow-xl
-                             hover:backdrop-blur-3xl hover:-translate-y-2 transition-all
+                             hover:backdrop-blur-3xl hover:-translate-y-3 transition-all
                               duration-300  rounded-xl gap-4 border border-gray-200  xl:w-96 lg:w-80 sm:w-72  ">
                                 <div className="bg-purple-500 p-2 self-start  rounded-lg">
                                     <img className="w-5 h-5 " src={item.icon}></img>
@@ -88,7 +89,7 @@ export default function HomePage() {
                 <h1 className="text-4xl font-extrabold text-white text-center">Ready to Fix Your Campus?</h1>
                 <p className="text-white text-center">Join thousands of students who are already making their voices heard</p>
                 <Link to="/login">
-                    <button className="text-purple-400 bg-white px-6 py-2 rounded-full transition-all duration-300 hover:-translate-y-2">Start reporting today</button>
+                    <button className="text-purple-400 cursor-pointer bg-white px-6 py-2 rounded-full transition-all duration-300 hover:-translate-y-2">Start reporting today</button>
                 </Link>
             </div>
         </div>
