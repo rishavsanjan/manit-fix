@@ -63,7 +63,6 @@ export default function PostDetail() {
         id: string
         picture: string
     } | null>(null);
-    const [viewReply, setViewReply] = useState(false);
     const [repliesData, setRepliesData] = useState<Comment[]>([]);
     const [renderReplyActive, setRenderReplyActive] = useState<string[]>([]);
     const [replyText, setReplyText] = useState('');
@@ -188,7 +187,6 @@ export default function PostDetail() {
         setRepliesData(prev => [...prev, response.data.replies])
 
         setRenderReplyActive(prev => [...prev, parentId]);
-        setViewReply(true)
         setRepliesLoading(null);
 
     }
@@ -225,7 +223,7 @@ export default function PostDetail() {
         }
         const token = localStorage.getItem('token');
 
-        const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/likecomment`, {
+        await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/likecomment`, {
             method: 'post',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -462,7 +460,7 @@ export default function PostDetail() {
             {
                 postLoading ?
                     <div className="flex flex-col justify-center items-center h-screen  gap-12">
-                        <ScaleLoader  color="#3b82f6" />
+                        <ScaleLoader color="#3b82f6" />
                         <h1 className="text-3xl text-center font-medium  text-[#3b82f6]">Loading</h1>
                     </div>
                     :
