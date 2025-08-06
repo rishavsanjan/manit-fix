@@ -53,7 +53,7 @@ export default function MyProfile() {
     const getProfile = async () => {
         const token = localStorage.getItem('token');
         if (token) {
-            const response = await axios(`http://127.0.0.1:8787/protected/profile`, {
+            const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/profile`, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -119,7 +119,7 @@ export default function MyProfile() {
             pictureUrl = await uploadToCloudinary(picture)
         }
         const token = localStorage.getItem('token');
-        const response = await axios(`http://127.0.0.1:8787/protected/update-profile`, {
+        const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/update-profile`, {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + token

@@ -36,7 +36,7 @@ export default function Header() {
     const getUser = async () => {
         const token = localStorage.getItem('token');
         if (token) {
-            const response = await axios(`http://127.0.0.1:8787/protected/profile`, {
+            const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/profile`, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token

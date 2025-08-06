@@ -98,7 +98,7 @@ export default function Posts() {
             setIsAuthenticate(true);
         }
         if (token) {
-            const response = await axios(`http://127.0.0.1:8787/protected/getposts?skip=${page * 10}&take=10&type=${filter}`, {
+            const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/getposts?skip=${page * 10}&take=10&type=${filter}`, {
                 method: 'get',
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -106,7 +106,7 @@ export default function Posts() {
             })
             setPosts(response.data.response)
         } else {
-            const response = await axios(`http://127.0.0.1:8787/getposts?skip=${page * 10}&take=10&type=${filter}`, {
+            const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/getposts?skip=${page * 10}&take=10&type=${filter}`, {
                 method: 'get',
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -159,7 +159,7 @@ export default function Posts() {
 
 
         if (currentReaction === null) {
-            const response = await axios(`http://127.0.0.1:8787/protected/addvote`, {
+            const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/addvote`, {
                 method: 'post',
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -191,7 +191,7 @@ export default function Posts() {
 
         const response = await axios({
             method: 'PUT',
-            url: `http://127.0.0.1:8787/protected/updatevote`,
+            url: `https://fixmycampus.movieapi-backend.workers.dev/protected/updatevote`,
             headers: {
                 'Authorization': 'Bearer ' + token
             },
@@ -232,7 +232,7 @@ export default function Posts() {
 
         const response = await axios({
             method: 'delete',
-            url: `http://127.0.0.1:8787/protected/removevote`,
+            url: `https://fixmycampus.movieapi-backend.workers.dev/protected/removevote`,
             headers: {
                 'Authorization': 'Bearer ' + token
             },

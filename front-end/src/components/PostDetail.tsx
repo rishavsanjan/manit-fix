@@ -82,7 +82,7 @@ export default function PostDetail() {
             setIsAuthenticate(true);
         }
         if (token) {
-            const response = await axios(`http://127.0.0.1:8787/protected/postdetail/${postId}`, {
+            const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/postdetail/${postId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -92,7 +92,7 @@ export default function PostDetail() {
             setComments(response.data.response.Comment);
             setUserId(response.data.userId)
         } else {
-            const response = await axios(`http://127.0.0.1:8787/postdetail/${postId}`, {
+            const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/postdetail/${postId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -121,7 +121,7 @@ export default function PostDetail() {
         const formData = new FormData();
         formData.append('comment', comment);
         const token = localStorage.getItem('token');
-        const response = await axios(`http://127.0.0.1:8787/protected/addcomment`, {
+        const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/addcomment`, {
             method: 'post',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -144,7 +144,7 @@ export default function PostDetail() {
         }
         setLoading(true);
         const token = localStorage.getItem('token');
-        const response = await axios(`http://127.0.0.1:8787/protected/addreplyto`, {
+        const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/addreplyto`, {
             method: 'post',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -176,7 +176,7 @@ export default function PostDetail() {
         setRepliesLoading({ id: parentId });
         const token = localStorage.getItem('token');
 
-        const response = await axios(`http://127.0.0.1:8787/getreplies`, {
+        const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/getreplies`, {
             method: 'post',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -225,7 +225,7 @@ export default function PostDetail() {
         }
         const token = localStorage.getItem('token');
 
-        const response = await axios(`http://127.0.0.1:8787/protected/likecomment`, {
+        const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/likecomment`, {
             method: 'post',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -280,7 +280,7 @@ export default function PostDetail() {
         }
         const token = localStorage.getItem('token');
 
-        const response = await axios(`http://127.0.0.1:8787/protected/removelike`, {
+        const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/removelike`, {
             method: 'post',
             headers: {
                 'Authorization': 'Bearer ' + token
