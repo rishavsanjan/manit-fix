@@ -9,6 +9,7 @@ interface User {
     Posts: Posts[]
     Comment: Comment[]
     Vote: Vote[]
+    department: string
 }
 
 
@@ -46,6 +47,9 @@ export default function MyProfile() {
     const [user, setUser] = useState<User | null>(null);
     const [isActive, setIsActive] = useState('posts');
     const [posts, setPosts] = useState<Posts[]>([]);
+    const [department, setDepartment] = useState('');
+    const [picture, setPicture] = useState<File | null>(null);
+
     const getProfile = async () => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -60,10 +64,6 @@ export default function MyProfile() {
             console.log(response.data);
         }
     }
-
-
-
-
 
     useEffect(() => {
         getProfile();
@@ -94,6 +94,55 @@ export default function MyProfile() {
         return 'just now';
     }
 
+
+    const uploadToCloudinary = async (file: File) => {
+        const data = new FormData();
+        data.append('file', file);
+        data.append('upload_preset', 'fixmycampus posts');
+        data.append('cloud_name', 'diwmvqto3');
+
+        const response = await fetch('https://api.cloudinary.com/v1_1/diwmvqto3/image/upload', {
+            method: 'POST',
+            body: data,
+        });
+
+        const result = await response.json();
+        return result.secure_url;
+    }
+
+    const handleUpdateProfile = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('department', department);
+        let pictureUrl = '';
+        if (picture) {
+            pictureUrl = await uploadToCloudinary(picture)
+        }
+        const token = localStorage.getItem('token');
+        const response = await axios(`http://127.0.0.1:8787/protected/update-profile`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            },
+            data: {
+                department, picture: pictureUrl
+            }
+        })
+        setUser(prev => {
+            if (prev?.department) {
+                return {
+                    ...prev, department: department
+                }
+            }
+            return prev;
+        }
+        )
+        console.log(response.data)
+    }
+
+    console.log(department)
+
+    console.log(picture)
     return (
         <div className=" w-full
                 bg-[image:var(--gradient-animated)]
@@ -104,13 +153,39 @@ export default function MyProfile() {
                 bg-[size:var(--size-400)]
                 animate-[animation:var(--animate-gradient-profile)] rouned-xl">
 
-                <div className="flex md:flex-row flex-col items-center justify-start gap-4 p-20 ">
-                    <div className="">
-                        <img className="rounded-full border-black border-2" src={`${user?.picture}`} alt="" />
+                <div className="flex md:flex-row  flex-col items-center justify-start gap-8 p-20 ">
+                    <div className="relative">
+                        {
+                            isActive === 'settings'
+                                ?
+                                <form onSubmit={handleUpdateProfile} action="">
+                                    <div className="relative w-32 h-32">
+                                        <img
+                                            className="w-full h-full rounded-full object-cover border-2 border-gray-300"
+                                            src="https://img.icons8.com/?size=100&id=u4U9G3tGGHu1&format=png&color=000000"
+                                            alt="Profile"
+                                        />
+
+                                        <input onChange={(e) => {setPicture(e.target.files?.[0] ?? null)}} type="file" id="fileUpload" className="hidden" />
+                                        {/* @ts-ignore */}
+                                        <label for="fileUpload"
+                                            className="absolute bottom-0 right-0 bg-blue-600 text-white w-8 h-8 flex items-center justify-center rounded-full cursor-pointer shadow hover:bg-blue-700 transition">
+                                            +
+                                        </label>
+                                    </div>
+                                </form>
+
+
+                                :
+                                <img className="rounded-full  border-black border-2" src={`${user?.picture ||
+                                    'https://img.icons8.com/?size=100&id=u4U9G3tGGHu1&format=png&color=000000'
+                                    }`} alt="" />
+                        }
                     </div>
                     <div>
                         <h1 className="text-white sm:text-3xl text-2xl font-bold mb-1 text-center">{user?.name}</h1>
-                        <h1 className="text-gray-300 mb-5">{user?.email}</h1>
+                        <h1 className="text-gray-700 ">{user?.email}</h1>
+                        <h1 className="text-gray-700 mb-5">{user?.department}</h1>
                         <div className="flex flex-row gap-4">
                             <div className="flex flex-col items-center">
                                 <h1 className="text-white text-3xl font-bold ">{user?.Posts?.length || 0}</h1>
@@ -331,7 +406,7 @@ export default function MyProfile() {
                 <div className="bg-white p-4">
                     <h1 className="text-black text-xl font-bold ">Profile Settings</h1>
 
-                    <form action="">
+                    <form onSubmit={handleUpdateProfile} action="">
                         <div className="flex flex-col gap-6">
                             <div className="">
                                 <p className=" text-gray-700 font-medium">Display Name</p>
@@ -341,8 +416,10 @@ export default function MyProfile() {
                                 <p className=" text-gray-700 font-medium">Department</p>
                                 <select
                                     defaultValue=""
-                                    className="border border-gray-700 rounded-lg p-1.5  self-start text-start items-start" name="" id="">
-                                    <option disabled value="">
+                                    className="border border-gray-700 rounded-lg p-1.5  self-start text-start items-start" name="" id=""
+                                    value={department} onChange={(e) => { setDepartment(e.target.value) }}
+                                >
+                                    <option value="" disabled >
                                         Select an catogery
                                     </option>
                                     <option value="Master of Computer Application">Master of Computer Application (MCA)</option>
@@ -353,7 +430,7 @@ export default function MyProfile() {
                                 </select>
                             </div>
                             <div>
-                                <button className="px-6 p-2 rounded-xl bg-blue-500 text-white bg-gradient-to-r 
+                                <button type="submit" className="px-6 p-2 rounded-xl bg-blue-500 text-white bg-gradient-to-r 
                                 from-blue-400 to-blue-600 hover:bg-gradient-to-r hover:from-[#6068F1] hover:to-[#8936EA] 
                          transition-colors duration-1000 cursor-pointer
                                 ">

@@ -74,17 +74,17 @@ app.get('/protected/profile', async (c) => {
       Comment: {
         select: {
           post: {
-            select:{
-              user:{
-                select:{
-                  name:true,
-                  id:true,
-                  picture:true
+            select: {
+              user: {
+                select: {
+                  name: true,
+                  id: true,
+                  picture: true
                 }
               },
-              title:true,
-              image:true
-              
+              title: true,
+              image: true
+
             }
           },
           text: true,
@@ -950,6 +950,24 @@ app.post('/protected/removelike', async (c) => {
 
   return c.json({ removelike })
 
+})
+
+app.post('/protected/update-profile', async (c) => {
+  const prisma = getPrisma(c.env.DATABASE_URL);
+
+  //@ts-ignore
+  const { id: userId } = c.get('user');
+  const { department, picture } = await c.req.json();
+  const updatedUser = await prisma.user.update({
+    where: {
+      id: userId
+    },
+    data: {
+      department, picture
+    }
+  })
+
+  return c.json({updatedUser})
 })
 
 

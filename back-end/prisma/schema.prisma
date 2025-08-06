@@ -13,6 +13,7 @@ model User {
   name             String
   picture          String?
   googleId         String             @unique
+  department       String?
   Posts            Posts[]
   createdAt        DateTime?          @default(now())
   Vote             Vote[]

@@ -10,6 +10,7 @@ import PostDetail from "./components/PostDetail";
 import Footer from "./components/Footer";
 import Features from "./components/Features";
 import MyProfile from "./components/MyProfile";
+import Admin from "./components/Admin";
 function App() {
 
   function AppContent() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/posts/:postId" element={<PostDetail />} />
           <Route path="/features" element={<Features />} />
           <Route path="/my-profile" element={<MyProfile />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
         <Footer />
       </>

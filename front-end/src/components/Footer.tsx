@@ -19,7 +19,7 @@ export default function Footer() {
             </div>
             <div>
                 <p className="text-white">© 2025 FixMyCampus. Making campuses better, one report at a time.</p>
-                <a href=""><p>Go To Admin Section</p></a>
+                <Link to="/admin"><p>Go To Admin Section</p></Link>
             </div>
         </div>
     )

@@ -113,34 +113,28 @@ export default function Header() {
                         authenticated &&
                         <>
                             {
-                                user?.picture !== null ?
-                                    <div onFocus={() => { setProfileDropDown(true) }} className=" mr-10 group relative">
-                                        <div className="rounded-full border-2 border-black" >
-                                            <img style={{ width: 40, height: 40 }} src={`${user?.picture === undefined
-                                                ? 'https://img.icons8.com/?size=100&id=95101&format=png&color=000000' :
-                                                `${user?.picture}`
-                                                }`}></img>
-                                        </div>
+                                <div onFocus={() => { setProfileDropDown(true) }} className=" mr-10 group relative">
+                                    <div className="rounded-full border-2 border-black" >
+                                        <img style={{ width: 40, height: 40 }} src={`${user?.picture || 'https://img.icons8.com/?size=100&id=u4U9G3tGGHu1&format=png&color=000000'}`}></img>
+                                    </div>
 
-                                        <div className="w-32 p-4 z-50 rounded-xl bg-gray-200 absolute top-10 right-0
+                                    <div className="w-32 p-4 z-50 rounded-xl bg-gray-200 absolute top-10 right-0
                                          opacity-0 invisible group-hover:opacity-100 group-hover:visible
                                           transition-all transform 
                                           duration-300 ease-in-out items-center justify-center flex flex-col gap-4">
-                                            <Link to="/my-profile">
-                                                <button><h1>My Profile</h1></button>
-                                            </Link>
+                                        <Link to="/my-profile">
+                                            <button><h1>My Profile</h1></button>
+                                        </Link>
 
-                                            <button><h1>My Posts</h1></button>
-                                            {
-                                                authenticated &&
-                                                <button onClick={handleLogout} className="bg-red-500 px-3 p-1 rounded-xl text-white cursor-pointer">
-                                                    Logout
-                                                </button>
-                                            }
-                                        </div>
+                                        <button><h1>My Posts</h1></button>
+                                        {
+                                            authenticated &&
+                                            <button onClick={handleLogout} className="bg-red-500 px-3 p-1 rounded-xl text-white cursor-pointer">
+                                                Logout
+                                            </button>
+                                        }
                                     </div>
-                                    :
-                                    <img className="w-3 h-3" src="https://img.icons8.com/?size=100&id=98957&format=png&color=000000" alt="" />
+                                </div>
                             }
                         </>
 
@@ -152,7 +146,7 @@ export default function Header() {
             </div>
             {
                 fullWhite &&
-                <div data-aos="slide-left" className="bg-white h-screen  p-4 gap-4 flex flex-col transition-all duration-300 ">
+                <div data-aos="slide-left" className="bg-white h-screen  p-4 gap-4 flex flex-col transition-all duration-300 overflow-hidden">
                     <Link to="/">
                         <button className="w-full flex flex-row justify-between items-center" onClick={() => setFullWhite(false)}>
                             <h1 className="p-4 hover:bg-gray-200 transition-all duration-300 text-start">Home</h1>
@@ -186,6 +180,15 @@ export default function Header() {
                             <img className="w-4 h-4" src="https://img.icons8.com/?size=100&id=61&format=png&color=000000" alt="" />
                         </button>
                     </a>
+                    {
+                        authenticated &&
+                        <Link to="/my-profile">
+                        <button className="w-full flex flex-row justify-between items-center" onClick={() => setFullWhite(false)}>
+                            <h1 className="p-4 hover:bg-gray-200 transition-all duration-300 text-start">My Profile</h1>
+                            <img className="w-4 h-4" src="https://img.icons8.com/?size=100&id=61&format=png&color=000000" alt="" />
+                        </button>
+                    </Link>
+                    }
                 </div>
             }
         </>
