@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import { NeedToLogInModal } from "../modals/NeedToLogInModel";
 import { ScaleLoader, SyncLoader } from "react-spinners";
-
+import { useNavigate } from "react-router-dom";
 
 
 interface Post {
@@ -14,11 +14,12 @@ interface Post {
     image: string,
     location: string,
     catogery: string
-    createdAt: string | undefined
+    createdAt: string
     status: string
     Comment: Comment[]
     CommentReactions: CommentReactions[]
     userId: string
+    
 }
 
 
@@ -27,6 +28,7 @@ interface CommentReactions {
     commentId: string
     type: string | null
     userId: string
+    createdAt:string
 }
 
 interface Comment {
@@ -38,6 +40,7 @@ interface Comment {
     CommentReactions: CommentReactions[]
     userId: string
     comment: Comment[]
+    createdAt:string
 
 }
 
@@ -45,11 +48,13 @@ interface User {
     id: string
     name: string
     picture: string
+    createdAt:string
 }
 
 interface Replies {
     replies: Replies[]
     comment: Comment[]
+    createdAt:string
 }
 
 export default function PostDetail() {
@@ -73,6 +78,9 @@ export default function PostDetail() {
     const [repliesLoading, setRepliesLoading] = useState<{
         id: string
     } | null>(null);
+    const [addingReply, setAddingReply] = useState(false);
+    const navigate = useNavigate();
+
 
     const getPostDetail = async () => {
         setPostLoading(true);
@@ -141,7 +149,7 @@ export default function PostDetail() {
             setLogInModal(true);
             return;
         }
-        setLoading(true);
+        setAddingReply(true);
         const token = localStorage.getItem('token');
         const response = await axios(`http://127.0.0.1:8787/protected/addreplyto`, {
             method: 'post',
@@ -168,7 +176,7 @@ export default function PostDetail() {
 
 
         renderReply(rootReply!.id)
-        setLoading(false)
+        setAddingReply(false)
     }
 
     const renderReply = async (parentId: string) => {
@@ -328,7 +336,7 @@ export default function PostDetail() {
 
     }
 
-
+    console.log(post)
 
     const renderViewReply = (parentId: string) => {
         const flat = repliesData.flat(Infinity)
@@ -346,16 +354,20 @@ export default function PostDetail() {
 
                             return (
                                 <div key={index} className="flex flex-col p-4 pl-8">
-                                    <div className="flex flex-row items-center gap-4">
-                                        <img className="w-10 h-10 rounded-full mb-4 border-gray-300 border-2 " src={item.user.picture} alt="" />
-                                        <div className=" flex flex-col ">
+                                    <div className="flex flex-row items-start gap-4">
+                                        <div className="sm:w-1/12 w-10 mt-2">
+                                            <img className="sm:w-10 sm:h-10 w-9 h-9  rounded-full mb-4 border-gray-300 border-2 " src={item?.user?.picture || 'https://img.icons8.com/?size=100&id=15263&format=png&color=000000'} alt="" />
+
+                                        </div>
+                                        <div className=" w-11/12 md:w-full flex flex-col ">
                                             <div className={`${rootReply?.id === item.id ? 'bg-blue-300' : 'bg-gray-300'}  p-2 rounded-3xl px-4`}>
-                                                <h1 className="font-medium">{item.user.name}</h1>
-                                                <h1>{item.text}</h1>
+                                                <h1 className="sm:text-md text-sm font-medium">{item.user.name}</h1>
+                                                <h1 className="sm:text-md text-sm">{item.text}</h1>
                                             </div>
                                             <div className="gap-4 flex flex-row justify-between ml-4">
-                                                <div className="flex flex-row gap-4">
-                                                    <button onClick={() => { handleRemoveLike(item.id) }} className={`${isLiked ? 'text-blue-500' : 'text-gray-700'}  hover:underline cursor-pointer`}>{isLiked && 'Unlike'} </button>
+                                                <div className="flex flex-row gap-2 ">
+                                                    <h1 className="text-gray-600 ml-4">{timeAgo(item.createdAt)}</h1>
+                                                    <button onClick={() => { handleRemoveLike(item.id) }} className={`${isLiked ? 'text-blue-500' : 'text-gray-700'}  hover:underline cursor-pointer `}>{isLiked && 'Unlike'} </button>
                                                     <button onClick={() => { handleLike(item.id) }} className={`${isLiked ? 'text-blue-500' : 'text-gray-700'}  hover:underline cursor-pointer`}>{!isLiked && 'Like'} </button>
 
                                                     <button onClick={() => setRootReply({
@@ -384,13 +396,16 @@ export default function PostDetail() {
                                         rootReply?.id === item.id &&
                                         <form onSubmit={addRootReply}>
                                             <div className="w-full flex flex-row items-center gap-4 pl-8 justify-between">
-                                                <img className="w-10 h-10 rounded-full mb-4 border-gray-300 border-2 " src={rootReply.picture} alt="" />
+                                                <img className="w-10 h-10 rounded-full mb-4 border-gray-300 border-2 " src={rootReply?.picture || 'https://img.icons8.com/?size=100&id=15263&format=png&color=000000'} alt="" />
                                                 <textarea value={replyText} onChange={(e) => { setReplyText(e.target.value) }} placeholder={`Reply to ${rootReply.name}...`} className="bg-gray-300 rounded-2xl p-2 mt-2 w-full
                                                         focus:border-blue-500 outline-none border-2 border-gray-300 transition-all duration-300
                                                         " name="" id=""></textarea>
+
                                                 <button type="submit" className="cursor-pointer ">
                                                     {loading ?
-                                                        <div className="items-center justify-center flex gap-1"><ClipLoader color="#fff" size={20} /> Uploading...</div>
+                                                        <div className="items-center justify-center flex gap-1">
+                                                            <ClipLoader color="#fff" size={20} /> Uploading...
+                                                        </div>
                                                         :
                                                         <img className="w-5 h-5 " src="https://img.icons8.com/?size=100&id=AdrKKYXG06TU&format=png&color=000000" alt="" />
                                                     }
@@ -453,6 +468,33 @@ export default function PostDetail() {
         )
     }
 
+    function timeAgo(dateString: string): string {
+        const now = new Date();
+        const date = new Date(dateString);
+        const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+        const intervals: { [key: string]: number } = {
+            y: 31536000,
+            m: 2592000,
+            w: 604800,
+            d: 86400,
+            hr: 3600,
+            min: 60,
+            sec: 1,
+        };
+
+        for (const key in intervals) {
+            const value = intervals[key];
+            const amount = Math.floor(seconds / value);
+            if (amount >= 1) {
+                if (key === 'sec' && amount < 30) return 'just now';
+                return `${amount}${key}${amount > 1 ? '' : ''}`;
+            }
+        }
+
+        return 'just now';
+    }
+
     return (
         <>
             {
@@ -463,9 +505,9 @@ export default function PostDetail() {
                     </div>
                     :
                     <div className="p-4 flex flex-col gap-4">
-                        <div className="hover:bg-blue-50 self-start transition-all duration-300">
+                        <button onClick={() => navigate(-1)} className="hover:bg-blue-50 self-start transition-all duration-300 cursor-pointer ">
                             <h1 className="text-md text-blue-500 font-medium">← Back to All Issues</h1>
-                        </div>
+                        </button>
                         <div className="sm:mx-12 md:mx-32 lg:mx-64 border border-gray-200 rounded-xl p-4 shadow-sm  gap-4 flex flex-col">
                             <div className="flex flex-row justify-between items-center">
                                 <h1 className="font-bold text-3xl">{post?.title}</h1>
@@ -510,7 +552,7 @@ export default function PostDetail() {
                         </div>
                         <div className="flex flex-col  border border-gray-200 rounded-xl shadow-sm  sm:mx-12 md:mx-32 lg:mx-64">
                             {
-                                comments.length === 0
+                                comments?.length === 0
                                     ?
                                     <div className="p-4">
                                         <p className="text-xl text-gray-500 text-center">No comments yet!</p>
@@ -526,19 +568,20 @@ export default function PostDetail() {
                                                 const isLiked = item.CommentReactions.find(obj => { if (obj.userId === userId && obj.type === 'like') return true });
                                                 return (
                                                     <div key={index} className="flex flex-col sm:p-4 p-2">
-                                                        <div className="flex flex-row items-center gap-4">
+                                                        <div className="flex flex-row items-start gap-4 mt-2">
                                                             <div className="sm:w-1/12 w-10">
-                                                                <img className="sm:w-10 sm:h-10 w-9 h-9  rounded-full mb-4 border-gray-300 border-2 " src={item.user.picture} alt="" />
+                                                                <img className="sm:w-10 sm:h-10 w-9 h-9  rounded-full mb-4 border-gray-300 border-2 " src={item?.user?.picture || 'https://img.icons8.com/?size=100&id=15263&format=png&color=000000'} alt="" />
 
                                                             </div>
-                                                            <div className=" w-11/12 flex flex-col ">
+                                                            <div className=" w-11/12 md:w-full flex flex-col ">
                                                                 <div className={`${rootReply?.id === item.id ? 'bg-blue-300' : 'bg-gray-300'}  p-2 rounded-3xl px-4`}>
                                                                     <h1 className="sm:text-md text-sm font-medium">{item.user.name}</h1>
                                                                     <h1 className="sm:text-md text-sm">{item.text}</h1>
                                                                 </div>
                                                                 <div className="gap-4 flex flex-row justify-between ">
-                                                                    <div className="flex flex-row gap-4">
-                                                                        <button onClick={() => { handleRemoveLike(item.id) }} className={`${isLiked ? 'text-blue-500' : 'text-gray-700'}  hover:underline cursor-pointer`}>{isLiked && 'Unlike'} </button>
+                                                                    <div className="flex flex-row gap-2">
+                                                                        <h1 className="text-gray-600 ml-4">{timeAgo(item.createdAt)}</h1>
+                                                                        <button onClick={() => { handleRemoveLike(item.id) }} className={`${isLiked ? 'text-blue-500' : 'text-gray-700'}  hover:underline cursor-pointer `}>{isLiked && 'Unlike'} </button>
                                                                         <button onClick={() => { handleLike(item.id) }} className={`${isLiked ? 'text-blue-500' : 'text-gray-700'}  hover:underline cursor-pointer`}>{!isLiked && 'Like'} </button>                                                            <button onClick={() => setRootReply({
                                                                             id: item.id,
                                                                             name: item.user.name,
@@ -565,14 +608,14 @@ export default function PostDetail() {
                                                             rootReply?.id === item.id &&
                                                             <form onSubmit={addRootReply}>
                                                                 <div className="w-full flex flex-row items-center gap-4 pl-8 justify-between">
-                                                                    <img className="w-10 h-10 rounded-full mb-4 border-gray-300 border-2 " src={rootReply.picture} alt="" />
+                                                                    <img className="w-10 h-10 rounded-full mb-4 border-gray-300 border-2 " src={rootReply?.picture || 'https://img.icons8.com/?size=100&id=15263&format=png&color=000000'} alt="" />
                                                                     <textarea value={replyText} onChange={(e) => { setReplyText(e.target.value) }} placeholder={`Reply to ${rootReply.name}...`}
                                                                         className={`bg-gray-300 rounded-2xl p-2 mt-2 w-full
                                                         focus:border-blue-500 outline-none border-2 border-gray-300 transition-all duration-300 sm:text-sm font-semibold  text-xs 
                                                         `} name="" id=""></textarea>
                                                                     <button type="submit" className="cursor-pointer ">
-                                                                        {loading ?
-                                                                            <div className="items-center justify-center flex gap-1"><ClipLoader color="#fff" size={20} /> Uploading...</div>
+                                                                        {addingReply ?
+                                                                            <div className="items-center justify-center flex gap-1"><ClipLoader color="#8936EA" size={20} /> </div>
                                                                             :
                                                                             <img className="w-5 h-5 " src="https://img.icons8.com/?size=100&id=AdrKKYXG06TU&format=png&color=000000" alt="" />
                                                                         }

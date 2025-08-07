@@ -2,9 +2,12 @@ import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import {login} from '../store/userSlice'
 
 export default function Login() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleLogin = async (credentialResponse: any) => {
         const decodedUser: any = jwtDecode(credentialResponse.credential);
@@ -12,8 +15,8 @@ export default function Login() {
         if (email.endsWith('@stu.manit.ac.in')) {
 
         } else {
-            //alert("Access restricted to @stu.manit.ac.in emails only.");
-            //return;
+            alert("Access restricted to @stu.manit.ac.in emails only.");
+            return;
         }
 
         const response = await axios.post('http://127.0.0.1:8787/google', decodedUser, {
@@ -22,7 +25,9 @@ export default function Login() {
             }
         });
         if (response.data.token) {
+            dispatch(login());
             localStorage.setItem("token", response.data.token);
+
             navigate('/');
         } else {
             console.warn("No token received");

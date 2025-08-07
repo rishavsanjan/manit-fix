@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react"
 import ClipLoader from "react-spinners/ClipLoader";
+import { NeedToLogInModal } from "../modals/NeedToLogInModel";
 
 
 export default function ReportUpload() {
@@ -10,6 +11,7 @@ export default function ReportUpload() {
     const [location, setLocation] = useState('');
     const [image, setImage] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
+    const [loginModal, setLogInModal] = useState(false)
 
 
     const uploadToCloudinary = async (file: File) => {
@@ -28,7 +30,13 @@ export default function ReportUpload() {
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
+        
         e.preventDefault();
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setLogInModal(true);
+            return;
+        }
         setLoading(true);
         const formData = new FormData();
         formData.append('title', title);
@@ -41,7 +49,6 @@ export default function ReportUpload() {
         }
 
 
-        const token = localStorage.getItem('token');
         await axios(`http://127.0.0.1:8787/protected/upload-post`, {
             method: 'post',
             headers: {
@@ -143,7 +150,12 @@ export default function ReportUpload() {
 
 
             </div>
-
+            <>
+                {
+                    loginModal &&
+                    <NeedToLogInModal visible={loginModal} onClose={setLogInModal} />
+                }
+            </>
 
         </div>
     )

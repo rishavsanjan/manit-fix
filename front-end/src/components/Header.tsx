@@ -4,6 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import 'aos/dist/aos.css';
 //@ts-ignore
 import AOS from 'aos';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logout } from '../store/userSlice';
 
 interface Profile {
     email: string,
@@ -17,7 +20,11 @@ export default function Header() {
     const [authenticated, setAuthenticate] = useState(false);
     const [user, setUser] = useState<Profile | null>(null);
     const [fullWhite, setFullWhite] = useState(false);
-    
+    //@ts-ignore
+    const isLoggedIn = useSelector(state => state.user.authenticated)
+    const dispatch = useDispatch();
+
+
     useEffect(() => {
         AOS.init({
             duration: 600,
@@ -31,6 +38,7 @@ export default function Header() {
         localStorage.removeItem('token');
         setAuthenticate(false);
         navigate('/');
+        dispatch(logout());
     }
 
     const getUser = async () => {
@@ -44,7 +52,6 @@ export default function Header() {
             })
             setUser(response.data.user);
         }
-
 
 
     }
@@ -85,48 +92,57 @@ export default function Header() {
 
 
                 </div>
-                <div className="md:flex  flex-row gap-12 hidden  items-center py-2">
+                <div className="md:flex  flex-row gap-12 hidden   py-2 w-full items-center justify-end">
                     <Link to="/features">
-                        <button className="hover:bg-purple-400 transition-all duration-300
+                        <button className="hover:bg-purple-400 transition-all duration-300 cursor-pointer
                            p-2 rounded-xl">
                             <h1 className="hover:text-white text-gray-500">Features</h1>
                         </button>
 
                     </Link>
-                    <button className="hover:bg-purple-400 transition-all duration-300
+                    <button className="hover:bg-purple-400 transition-all duration-300 cursor-pointer
                        p-2 rounded-xl">
                         <h1 className="hover:text-white text-gray-500">About</h1>
                     </button>
 
 
-                    <button className="hover:bg-purple-400 transition-all duration-300
+                    <button className="hover:bg-purple-400 transition-all duration-300 cursor-pointer
                        p-2 rounded-xl">
-                        <a className="cursor-pointer" href="https://rishavsanjan-portfolio.netlify.app/">
+                        <a target="_blank" className="cursor-pointer" href="https://rishavsanjan-portfolio.netlify.app/">
                             <h1 className="hover:text-white text-gray-500">Contact</h1>
                         </a>
                     </button>
 
+                    {
+                        !isLoggedIn &&
+                        <button className="bg-purple-400 transition-all duration-300
+                       p-2 rounded-xl">
+                            <Link className="cursor-pointer" to="/login">
+                                <h1 className="hover:text-white text-white">Get Started</h1>
+                            </Link>
+                        </button>}
+
 
                     {
-                        authenticated &&
+                        isLoggedIn &&
                         <>
                             {
-                                <div  className=" mr-10 group relative">
-                                    <div className="rounded-full border-2 border-black" >
-                                        <img style={{ width: 40, height: 40 }} src={`${user?.picture || 'https://img.icons8.com/?size=100&id=u4U9G3tGGHu1&format=png&color=000000'}`}></img>
+                                <div className=" mr-10 group relative">
+                                    <div  >
+                                        <img className="rounded-full border-2 border-black" style={{ width: 40, height: 40 }} src={`${user?.picture || 'https://img.icons8.com/?size=100&id=u4U9G3tGGHu1&format=png&color=000000'}`}></img>
                                     </div>
 
                                     <div className="w-32 p-4 z-50 rounded-xl bg-gray-200 absolute top-10 right-0
                                          opacity-0 invisible group-hover:opacity-100 group-hover:visible
-                                          transition-all transform 
+                                          transition-all transform cursor-pointer
                                           duration-300 ease-in-out items-center justify-center flex flex-col gap-4">
                                         <Link to="/my-profile">
-                                            <button><h1>My Profile</h1></button>
+                                            <button className="cursor-pointer"><h1>My Profile</h1></button>
                                         </Link>
 
-                                        <button><h1>My Posts</h1></button>
+                                        <button className="cursor-pointer"><h1>My Posts</h1></button>
                                         {
-                                            authenticated &&
+                                            isLoggedIn &&
                                             <button onClick={handleLogout} className="bg-red-500 px-3 p-1 rounded-xl text-white cursor-pointer">
                                                 Logout
                                             </button>
@@ -179,13 +195,13 @@ export default function Header() {
                         </button>
                     </a>
                     {
-                        authenticated &&
+                        isLoggedIn &&
                         <Link to="/my-profile">
-                        <button className="w-full flex flex-row justify-between items-center" onClick={() => setFullWhite(false)}>
-                            <h1 className="p-4 hover:bg-gray-200 transition-all duration-300 text-start">My Profile</h1>
-                            <img className="w-4 h-4" src="https://img.icons8.com/?size=100&id=61&format=png&color=000000" alt="" />
-                        </button>
-                    </Link>
+                            <button className="w-full flex flex-row justify-between items-center" onClick={() => setFullWhite(false)}>
+                                <h1 className="p-4 hover:bg-gray-200 transition-all duration-300 text-start">My Profile</h1>
+                                <img className="w-4 h-4" src="https://img.icons8.com/?size=100&id=61&format=png&color=000000" alt="" />
+                            </button>
+                        </Link>
                     }
                 </div>
             }
