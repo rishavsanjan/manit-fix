@@ -49,7 +49,7 @@ export default function ReportUpload() {
         }
 
 
-        await axios(`http://127.0.0.1:8787/protected/upload-post`, {
+        await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/upload-post`, {
             method: 'post',
             headers: {
                 'Authorization': 'Bearer ' + token

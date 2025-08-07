@@ -203,6 +203,12 @@ export default function Header() {
                             </button>
                         </Link>
                     }
+                    {
+                        authenticated &&
+                        <div>
+                            
+                        </div>
+                    }
                 </div>
             }
         </>

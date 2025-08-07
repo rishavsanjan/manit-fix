@@ -4,7 +4,6 @@ import 'aos/dist/aos.css';
 //@ts-ignore
 import AOS from 'aos';
 import { useEffect, useState } from "react";
-import ClipLoader from "react-spinners/ClipLoader";
 
 
 export default function HomePage() {
