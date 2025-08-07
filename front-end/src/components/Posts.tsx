@@ -189,7 +189,7 @@ export default function Posts() {
             return;
         }
 
-         await axios({
+        await axios({
             method: 'PUT',
             url: `https://fixmycampus.movieapi-backend.workers.dev/protected/updatevote`,
             headers: {
@@ -231,7 +231,6 @@ export default function Posts() {
         const token = localStorage.getItem('token');
 
         await axios({
-        await axios({
             method: 'delete',
             url: `https://fixmycampus.movieapi-backend.workers.dev/protected/removevote`,
             headers: {
@@ -252,8 +251,7 @@ export default function Posts() {
                     ...post,
                     votes: newVotes
                 }
-            })
-        )
+            }))
     }
 
 

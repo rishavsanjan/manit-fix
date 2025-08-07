@@ -130,7 +130,7 @@ export default function MyProfile() {
             pictureUrl = await uploadToCloudinary(picture)
         }
         const token = localStorage.getItem('token');
-        const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/update-profile`, {
+        await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/update-profile`, {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + token

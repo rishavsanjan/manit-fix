@@ -17,7 +17,6 @@ export default function Header() {
     const [authenticated, setAuthenticate] = useState(false);
     const [user, setUser] = useState<Profile | null>(null);
     const [fullWhite, setFullWhite] = useState(false);
-    const [profileDropdown, setProfileDropDown] = useState(false);
     useEffect(() => {
         AOS.init({
             duration: 600,
