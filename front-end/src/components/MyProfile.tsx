@@ -130,7 +130,7 @@ export default function MyProfile() {
             pictureUrl = await uploadToCloudinary(picture)
         }
         const token = localStorage.getItem('token');
-        const response = await axios(`http://127.0.0.1:8787/protected/update-profile`, {
+        await axios(`http://127.0.0.1:8787/protected/update-profile`, {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + token
