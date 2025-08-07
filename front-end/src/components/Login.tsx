@@ -12,8 +12,8 @@ export default function Login() {
         if (email.endsWith('@stu.manit.ac.in')) {
 
         } else {
-            //alert("Access restricted to @stu.manit.ac.in emails only.");
-            //return;
+            alert("Access restricted to @stu.manit.ac.in emails only.");
+            return;
         }
 
         const response = await axios.post('https://fixmycampus.movieapi-backend.workers.dev/google', decodedUser, {

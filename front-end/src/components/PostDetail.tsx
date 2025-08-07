@@ -223,7 +223,7 @@ export default function PostDetail() {
         }
         const token = localStorage.getItem('token');
 
-        await axios(`http://127.0.0.1:8787/protected/likecomment`, {
+        await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/likecomment`, {
             method: 'post',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -278,7 +278,7 @@ export default function PostDetail() {
         }
         const token = localStorage.getItem('token');
 
-        await axios(`http://127.0.0.1:8787/protected/removelike`, {
+        await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/removelike`, {
             method: 'post',
             headers: {
                 'Authorization': 'Bearer ' + token
