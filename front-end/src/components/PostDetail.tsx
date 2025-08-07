@@ -336,7 +336,6 @@ export default function PostDetail() {
 
     }
 
-    console.log(post)
 
     const renderViewReply = (parentId: string) => {
         const flat = repliesData.flat(Infinity)

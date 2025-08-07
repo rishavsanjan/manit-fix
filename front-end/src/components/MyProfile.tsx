@@ -173,7 +173,6 @@ export default function MyProfile() {
         setSaveLoading(false);
     }
 
-    console.log(user)
     return (
         <>
             {
