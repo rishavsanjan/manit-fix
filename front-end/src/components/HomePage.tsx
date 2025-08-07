@@ -3,9 +3,25 @@ import { Link } from "react-router-dom";
 import 'aos/dist/aos.css';
 //@ts-ignore
 import AOS from 'aos';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
+
 
 export default function HomePage() {
+    const [authenticate, setAuthenticate] = useState(false);
+    const isAuthenticated = () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setAuthenticate(true);
+        }
+    }
+
+    useEffect(() => {
+        isAuthenticated();
+    }, []);
+
+
+
     useEffect(() => {
         AOS.init({
             duration: 600,
@@ -88,8 +104,8 @@ export default function HomePage() {
             animate-[animation:var(--animate-gradient)] flex items-center py-20 flex-col gap-6">
                 <h1 className="text-4xl font-extrabold text-white text-center">Ready to Fix Your Campus?</h1>
                 <p className="text-white text-center">Join thousands of students who are already making their voices heard</p>
-                <Link to="/login">
-                    <button className="text-purple-400 cursor-pointer bg-white px-6 py-2 rounded-full transition-all duration-300 hover:-translate-y-2">Start reporting today</button>
+                <Link to={`${authenticate ? '/report-upload' : '/login'}`}>
+                    <button className="text-purple-400 cursor-pointer bg-white px-6 py-2 rounded-full transition-all duration-300 hover:-translate-y-2">{authenticate ? 'Start reporting today' : 'LogIn / SignUp Now'} </button>
                 </Link>
             </div>
         </div>

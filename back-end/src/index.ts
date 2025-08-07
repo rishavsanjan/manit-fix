@@ -86,7 +86,8 @@ app.get('/protected/profile', async (c) => {
               },
               title: true,
               image: true,
-              createdAt:true
+              createdAt:true,
+              id:true
             }
           },
           text: true,
@@ -661,6 +662,7 @@ app.get('/protected/postdetail/:postId', async (c) => {
           text: true,
           parentId: true,
           replies: true,
+          createdAt:true,
           CommentReactions: {
             select: {
               userId: true,
@@ -739,6 +741,7 @@ app.get('/postdetail/:postId', async (c) => {
           text: true,
           parentId: true,
           replies: true,
+          createdAt:true,
           CommentReactions: {
             select: {
               userId: true,
