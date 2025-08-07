@@ -23,6 +23,8 @@ app.use('*', cors({
   allowMethods: ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE']
 }))
 
+
+
 const JWT_SECRET = 'rishav';
 
 app.get('/hello', (c) => {
@@ -83,8 +85,8 @@ app.get('/protected/profile', async (c) => {
                 }
               },
               title: true,
-              image: true
-
+              image: true,
+              createdAt:true
             }
           },
           text: true,
@@ -967,7 +969,7 @@ app.post('/protected/update-profile', async (c) => {
     }
   })
 
-  return c.json({updatedUser})
+  return c.json({ updatedUser })
 })
 
 

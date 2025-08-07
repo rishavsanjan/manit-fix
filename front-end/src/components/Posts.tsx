@@ -35,7 +35,7 @@ interface Comment {
 
 export default function Posts() {
     const [posts, setPosts] = useState<Posts[]>([]);
-    const [page, setPage] = useState(0);
+   // const [page, setPage] = useState(0);
     const [filter, setFilter] = useState('All Issues');
     const [likeHover, setLikeHoverHover] = useState<{
         id: string
@@ -98,7 +98,7 @@ export default function Posts() {
             setIsAuthenticate(true);
         }
         if (token) {
-            const response = await axios(`http://127.0.0.1:8787/protected/getposts?skip=${page * 10}&take=10&type=${filter}`, {
+            const response = await axios(`http://127.0.0.1:8787/protected/getposts?skip=${0 * 10}&take=10&type=${filter}`, {
                 method: 'get',
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -106,7 +106,7 @@ export default function Posts() {
             })
             setPosts(response.data.response)
         } else {
-            const response = await axios(`http://127.0.0.1:8787/getposts?skip=${page * 10}&take=10&type=${filter}`, {
+            const response = await axios(`http://127.0.0.1:8787/getposts?skip=${0 * 10}&take=10&type=${filter}`, {
                 method: 'get',
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -159,7 +159,7 @@ export default function Posts() {
 
 
         if (currentReaction === null) {
-            const response = await axios(`http://127.0.0.1:8787/protected/addvote`, {
+            await axios(`http://127.0.0.1:8787/protected/addvote`, {
                 method: 'post',
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -189,7 +189,7 @@ export default function Posts() {
             return;
         }
 
-        const response = await axios({
+        await axios({
             method: 'PUT',
             url: `http://127.0.0.1:8787/protected/updatevote`,
             headers: {
@@ -230,7 +230,7 @@ export default function Posts() {
         }
         const token = localStorage.getItem('token');
 
-        const response = await axios({
+        await axios({
             method: 'delete',
             url: `http://127.0.0.1:8787/protected/removevote`,
             headers: {
@@ -255,7 +255,6 @@ export default function Posts() {
         )
     }
 
-    console.log(posts)
 
     return (
         <>

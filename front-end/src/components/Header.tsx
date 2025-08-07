@@ -17,7 +17,7 @@ export default function Header() {
     const [authenticated, setAuthenticate] = useState(false);
     const [user, setUser] = useState<Profile | null>(null);
     const [fullWhite, setFullWhite] = useState(false);
-    const [profileDropdown, setProfileDropDown] = useState(false);
+    
     useEffect(() => {
         AOS.init({
             duration: 600,
@@ -43,7 +43,6 @@ export default function Header() {
                 }
             })
             setUser(response.data.user);
-            console.log(response.data)
         }
 
 
@@ -60,7 +59,6 @@ export default function Header() {
         getUser();
     }, []);
 
-    console.log(user?.picture)
 
     return (
         <>
@@ -113,7 +111,7 @@ export default function Header() {
                         authenticated &&
                         <>
                             {
-                                <div onFocus={() => { setProfileDropDown(true) }} className=" mr-10 group relative">
+                                <div  className=" mr-10 group relative">
                                     <div className="rounded-full border-2 border-black" >
                                         <img style={{ width: 40, height: 40 }} src={`${user?.picture || 'https://img.icons8.com/?size=100&id=u4U9G3tGGHu1&format=png&color=000000'}`}></img>
                                     </div>

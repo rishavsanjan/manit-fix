@@ -40,10 +40,9 @@ export default function ReportUpload() {
             postPicUrl = await uploadToCloudinary(image)
         }
 
-        console.log(postPicUrl)
 
         const token = localStorage.getItem('token');
-        const response = await axios(`http://127.0.0.1:8787/protected/upload-post`, {
+        await axios(`http://127.0.0.1:8787/protected/upload-post`, {
             method: 'post',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -53,7 +52,6 @@ export default function ReportUpload() {
             }
         })
 
-        console.log(response.data);
 
         setTitle('');
         setDescription('');
@@ -63,7 +61,6 @@ export default function ReportUpload() {
 
     }
 
-    console.log(image)
 
     return (
         <div className="h-full w-full
