@@ -1,6 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
+import { getCroppedImg } from '../utils/cropperImageHelper'; // adjust path accordingly
+import Modal from 'react-modal';
+import Cropper from 'react-easy-crop';
+
+
 interface User {
     id: string
     name: string
@@ -49,6 +54,13 @@ export default function MyProfile() {
     const [posts, setPosts] = useState<Posts[]>([]);
     const [department, setDepartment] = useState('');
     const [picture, setPicture] = useState<File | null>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [imageSrc, setImageSrc] = useState<string | null>(null);
+    const [crop, setCrop] = useState({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+    const [showCropModal, setShowCropModal] = useState(false);
+
 
     const getProfile = async () => {
         const token = localStorage.getItem('token');
@@ -61,7 +73,6 @@ export default function MyProfile() {
             })
             setUser(response.data.user);
             setPosts(response.data.user.Posts);
-            console.log(response.data);
         }
     }
 
@@ -137,12 +148,9 @@ export default function MyProfile() {
             return prev;
         }
         )
-        console.log(response.data)
     }
 
-    console.log(department)
 
-    console.log(picture)
     return (
         <div className=" w-full
                 bg-[image:var(--gradient-animated)]
@@ -166,7 +174,24 @@ export default function MyProfile() {
                                             alt="Profile"
                                         />
 
-                                        <input onChange={(e) => {setPicture(e.target.files?.[0] ?? null)}} type="file" id="fileUpload" className="hidden" />
+                                        <input
+                                            type="file"
+                                            id="fileUpload"
+                                            accept="image/*"
+                                            className="hidden"
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                    setSelectedFile(file);
+                                                    const reader = new FileReader();
+                                                    reader.onloadend = () => {
+                                                        setImageSrc(reader.result as string);
+                                                        setShowCropModal(true);
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            }}
+                                        />
                                         {/* @ts-ignore */}
                                         <label for="fileUpload"
                                             className="absolute bottom-0 right-0 bg-blue-600 text-white w-8 h-8 flex items-center justify-center rounded-full cursor-pointer shadow hover:bg-blue-700 transition">
@@ -334,17 +359,16 @@ export default function MyProfile() {
                         {
                             user?.Comment.map((item) => {
                                 return (
-
                                     <div className="mb-2 bg-white hover:bg-gray-100 p-4 transition-all duration-300 cursor-pointer">
                                         {
                                             item.parent !== null
                                                 ?
                                                 <div className="flex flex-row justify-between">
                                                     <div className="flex flex-row gap-3 mb-4">
-                                                        <img className="rounded-full w-12 h-12" src={`${item?.parent?.user?.picture || 'N/A'}`} alt="" />
+                                                        <img className="rounded-full sm:w-12 sm:h-12 w-6 h-6" src={`${item?.parent?.user?.picture || 'N/A'}`} alt="" />
                                                         <div>
-                                                            <h1 className="font-bold">{item?.parent?.user?.name || 'N/A'}</h1>
-                                                            <h1 className="text-sm text-gray-500 font-semibold">{formatTimeAgo(item?.parent?.createdAt || 'N.A')}</h1>
+                                                            <h1 className="font-bold sm:text-sm sm:w-full w-36 text-[14px]">{item?.parent?.user?.name || 'N/A'}</h1>
+                                                            <h1 className="sm:text-sm text-[10px] text-gray-500 font-semibold">{formatTimeAgo(item?.parent?.createdAt || 'N.A')}</h1>
                                                         </div>
                                                         <div>
                                                             <h1>{item?.parent?.text || 'N/A'}</h1>
@@ -357,10 +381,10 @@ export default function MyProfile() {
                                                 :
                                                 <div className="flex flex-row justify-between">
                                                     <div className="flex flex-row gap-3 mb-4">
-                                                        <img className="rounded-full w-12 h-12" src={`${item?.post.title || 'N/A'}`} alt="" />
+                                                        <img className="rounded-full w-12 h-12" src={`${item?.post.user.picture || 'N/A'}`} alt="" />
                                                         <div>
-                                                            <h1 className="font-bold">{item?.post?.user?.name || 'N/A'}</h1>
-                                                            <h1 className="text-sm text-gray-500 font-semibold">{formatTimeAgo(item?.post?.createdAt || 'N.A')}</h1>
+                                                            <h1 className="font-bold sm:text-sm sm:w-full w-36 text-[14px]">{item?.post?.user?.name || 'N/A'}</h1>
+                                                            <h1 className="sm:text-sm text-[10px] text-gray-500 font-semibold">{formatTimeAgo(item?.post?.createdAt || 'N.A')}</h1>
                                                         </div>
                                                         <div>
                                                             <h1>{item?.post?.title || 'N/A'}</h1>
@@ -372,17 +396,17 @@ export default function MyProfile() {
                                                 </div>
                                         }
 
-                                        <div className="ml-8 flex flex-row gap-4">
-                                            <div className="flex flex-row items-center gap-4">
+                                        <div className="ml-8 flex flex-col gap-4">
+                                            <div className="flex flex-row items-center gap-2">
                                                 <img className="rounded-full w-10 h-10" src={`${user.picture}`} alt="" />
                                                 <div>
-                                                    <h1 className="font-bold">{user.name}</h1>
+                                                    <h1 className="font-bold  text-[10px]">{user.name}</h1>
                                                     <h1 className="font-bold text-sm text-gray-500">{formatTimeAgo(item.createdAt)}</h1>
 
                                                 </div>
                                             </div>
-                                            <div>
-                                                <h1>{item.text}</h1>
+                                            <div className="">
+                                                <h1 className="">{item.text}</h1>
                                             </div>
                                         </div>
                                     </div>
@@ -420,7 +444,7 @@ export default function MyProfile() {
                                     value={department} onChange={(e) => { setDepartment(e.target.value) }}
                                 >
                                     <option value="" disabled >
-                                        Select an catogery
+                                        Select your department
                                     </option>
                                     <option value="Master of Computer Application">Master of Computer Application (MCA)</option>
                                     <option value="Bachelor of Technology">Bachelor of Technology (B.Tech)</option>
@@ -445,9 +469,45 @@ export default function MyProfile() {
 
                 </div>
             }
+            <>
+                <Modal isOpen={showCropModal} onRequestClose={() => setShowCropModal(false)} className="modal-class">
+                    <div className="w-full h-[400px] relative">
+                        {imageSrc && (
+                            <Cropper
+                                image={imageSrc}
+                                crop={crop}
+                                zoom={zoom}
+                                aspect={1}
+                                onCropChange={setCrop}
+                                onZoomChange={setZoom}
+                                //@ts-ignore
+                                onCropComplete={(_, croppedAreaPixels) => setCroppedAreaPixels(croppedAreaPixels)}
+                            />
+                        )}
+                    </div>
+                    <div className="mt-4 flex justify-between">
+                        <button onClick={() => setShowCropModal(false)} className="p-2 bg-red-500 text-white rounded">Cancel</button>
+                        <button
+                            onClick={async () => {
+                                if (!imageSrc || !croppedAreaPixels) return;
+                                const croppedBlob = await getCroppedImg(imageSrc, croppedAreaPixels, zoom);
+                                const croppedFile = new File([croppedBlob], selectedFile?.name || 'cropped.jpg', { type: 'image/jpeg' });
+                                setPicture(croppedFile);
+                                setShowCropModal(false);
+                            }}
+                            className="p-2 bg-blue-500 text-white rounded"
+                        >
+                            Crop & Save
+                        </button>
+                    </div>
+                </Modal>
+
+            </>
         </div>
 
 
 
     )
 }
+
+

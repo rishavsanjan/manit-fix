@@ -223,7 +223,7 @@ export default function PostDetail() {
         }
         const token = localStorage.getItem('token');
 
-        await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/likecomment`, {
+        await axios(`http://127.0.0.1:8787/protected/likecomment`, {
             method: 'post',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -278,7 +278,7 @@ export default function PostDetail() {
         }
         const token = localStorage.getItem('token');
 
-        const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/removelike`, {
+        await axios(`http://127.0.0.1:8787/protected/removelike`, {
             method: 'post',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -287,7 +287,6 @@ export default function PostDetail() {
                 postId, commentId
             }
         })
-        console.log(response.data);
 
 
 
@@ -329,7 +328,6 @@ export default function PostDetail() {
 
     }
 
-    console.log(comments)
 
 
     const renderViewReply = (parentId: string) => {
@@ -526,12 +524,14 @@ export default function PostDetail() {
                                                 }
                                                 const isTrue = renderReplyActive.find(obj => obj === item.id);
                                                 const isLiked = item.CommentReactions.find(obj => { if (obj.userId === userId && obj.type === 'like') return true });
-                                                console.log(isLiked)
                                                 return (
                                                     <div key={index} className="flex flex-col sm:p-4 p-2">
                                                         <div className="flex flex-row items-center gap-4">
-                                                            <img className="w-10 h-10 rounded-full mb-4 border-gray-300 border-2 " src={item.user.picture} alt="" />
-                                                            <div className=" flex flex-col ">
+                                                            <div className="sm:w-1/12 w-10">
+                                                                <img className="sm:w-10 sm:h-10 w-9 h-9  rounded-full mb-4 border-gray-300 border-2 " src={item.user.picture} alt="" />
+
+                                                            </div>
+                                                            <div className=" w-11/12 flex flex-col ">
                                                                 <div className={`${rootReply?.id === item.id ? 'bg-blue-300' : 'bg-gray-300'}  p-2 rounded-3xl px-4`}>
                                                                     <h1 className="sm:text-md text-sm font-medium">{item.user.name}</h1>
                                                                     <h1 className="sm:text-md text-sm">{item.text}</h1>

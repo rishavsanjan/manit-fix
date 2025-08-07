@@ -18,8 +18,16 @@ export default function Footer() {
                 </div>
             </div>
             <div>
+                <h1 className="text-white font-bold">COLLABORATORS </h1>
+                <div className="flex-row flex items-center gap-1">
+                    <img className="w-4 h-4" src="https://img.icons8.com/?size=100&id=23265&format=png&color=FFFFFF" alt="" />
+                    <p className="text-white font-light ">Rishav Sanjan (MCA'27, MANIT Bhopal)</p>
+                </div>
+                
+            </div>
+            <div>
                 <p className="text-white">© 2025 FixMyCampus. Making campuses better, one report at a time.</p>
-                <Link to="/admin"><p>Go To Admin Section</p></Link>
+                {/* <Link to="/admin"><p>Go To Admin Section</p></Link> */}
             </div>
         </div>
     )

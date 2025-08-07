@@ -40,7 +40,6 @@ export default function ReportUpload() {
             postPicUrl = await uploadToCloudinary(image)
         }
 
-        console.log(postPicUrl)
 
         const token = localStorage.getItem('token');
         const response = await axios(`https://fixmycampus.movieapi-backend.workers.dev/protected/upload-post`, {
@@ -53,7 +52,6 @@ export default function ReportUpload() {
             }
         })
 
-        console.log(response.data);
 
         setTitle('');
         setDescription('');
@@ -63,7 +61,6 @@ export default function ReportUpload() {
 
     }
 
-    console.log(image)
 
     return (
         <div className="h-full w-full

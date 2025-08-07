@@ -17,6 +17,7 @@ export default function Header() {
     const [authenticated, setAuthenticate] = useState(false);
     const [user, setUser] = useState<Profile | null>(null);
     const [fullWhite, setFullWhite] = useState(false);
+    const [profileDropdown, setProfileDropDown] = useState(false);
     useEffect(() => {
         AOS.init({
             duration: 600,
@@ -42,7 +43,6 @@ export default function Header() {
                 }
             })
             setUser(response.data.user);
-            console.log(response.data)
         }
 
 
@@ -59,7 +59,6 @@ export default function Header() {
         getUser();
     }, []);
 
-    console.log(user?.picture)
 
     return (
         <>
