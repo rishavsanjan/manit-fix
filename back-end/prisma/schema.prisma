@@ -22,19 +22,20 @@ model User {
 }
 
 model Posts {
-  id               String             @id @default(uuid())
-  title            String
-  description      String
-  location         String
-  catogery         String
-  image            String?
-  userId           String
-  status           Status             @default(Pending)
-  user             User               @relation(fields: [userId], references: [id])
-  Vote             Vote[]
-  Comment          Comment[]
-  createdAt        DateTime           @default(now())
-  CommentReactions CommentReactions[]
+  id                    String                  @id @default(uuid())
+  title                 String
+  description           String
+  location              String
+  catogery              String
+  image                 String?
+  userId                String
+  status                Status                  @default(Pending)
+  user                  User                    @relation(fields: [userId], references: [id])
+  Vote                  Vote[]
+  Comment               Comment[]
+  createdAt             DateTime                @default(now())
+  CommentReactions      CommentReactions[]
+  AdminstrativeComments AdminstrativeComments[]
 }
 
 enum Status {
@@ -92,4 +93,19 @@ model CommentReactions {
 
 enum CommentReactionType {
   like
+}
+
+model AdminstrativeComments {
+  id        String                   @id @default(uuid())
+  createdAt DateTime                 @default(now())
+  postId    String
+  post      Posts                    @relation(fields: [postId], references: [id])
+  comment   String
+  type      AdminstrativeCommentType
+}
+
+enum AdminstrativeCommentType {
+  internal
+  status
+  public
 }

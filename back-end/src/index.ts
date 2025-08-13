@@ -86,8 +86,8 @@ app.get('/protected/profile', async (c) => {
               },
               title: true,
               image: true,
-              createdAt:true,
-              id:true
+              createdAt: true,
+              id: true
             }
           },
           text: true,
@@ -662,7 +662,7 @@ app.get('/protected/postdetail/:postId', async (c) => {
           text: true,
           parentId: true,
           replies: true,
-          createdAt:true,
+          createdAt: true,
           CommentReactions: {
             select: {
               userId: true,
@@ -676,6 +676,13 @@ app.get('/protected/postdetail/:postId', async (c) => {
               name: true,
               picture: true
             }
+          }
+        }
+      },
+      AdminstrativeComments : {
+        where:{
+          type:{
+            in:['public', 'status']
           }
         }
       }
@@ -741,7 +748,7 @@ app.get('/postdetail/:postId', async (c) => {
           text: true,
           parentId: true,
           replies: true,
-          createdAt:true,
+          createdAt: true,
           CommentReactions: {
             select: {
               userId: true,
@@ -757,7 +764,16 @@ app.get('/postdetail/:postId', async (c) => {
             }
           }
         }
+      },
+      AdminstrativeComments:{
+        where:{
+          postId:id,
+          type:{
+            in:['public', 'status']
+          }
+        }
       }
+      
     }
   })
 
@@ -975,5 +991,92 @@ app.post('/protected/update-profile', async (c) => {
   return c.json({ updatedUser })
 })
 
+app.post('/protected/admin/dashboard', async (c) => {
+  const prisma = getPrisma(c.env.DATABASE_URL);
+
+  //@ts-ignore
+  const { id: userId } = c.get('user');
+  const dashboard = await prisma.posts.groupBy({
+    by: ['status'],
+    _count: {
+      status: true
+    }
+  })
+
+  return c.json({ dashboard });
+})
+
+
+app.post('/protected/admin/issues', async (c) => {
+  const prisma = getPrisma(c.env.DATABASE_URL);
+
+  //@ts-ignore
+  const { id: userId } = c.get('user');
+  const issues = await prisma.posts.findMany({
+    where: {
+      status: {
+        in: ['Pending', 'InProgress']
+      }
+    }
+  });
+
+  return c.json({ issues });
+})
+
+app.get('/protected/admin/issue-detail/:postId', async (c) => {
+  const prisma = getPrisma(c.env.DATABASE_URL);
+
+  //@ts-ignore
+  const { id: userId } = c.get('user');
+  const id = c.req.param('postId');
+  const issue = await prisma.posts.findUnique({
+    where: {
+      id
+    },
+    include: {
+      AdminstrativeComments: true
+    }
+  });
+
+  return c.json({ issue });
+})
+
+app.post('/protected/admin/add-comment', async (c) => {
+  const prisma = getPrisma(c.env.DATABASE_URL);
+
+  //@ts-ignore
+  const { id: userId } = c.get('user');
+
+  const { comment, commentType, postId } = await c.req.json();
+
+  const addComment = await prisma.adminstrativeComments.create({
+    data: {
+      comment, type: commentType, postId
+    }
+  })
+
+  return c.json({ addComment });
+})
+
+app.post('/protected/admin/update-status', async (c) => {
+  const prisma = getPrisma(c.env.DATABASE_URL);
+
+  //@ts-ignore
+  const { id: userId } = c.get('user');
+
+  const { newStatus, postId } = await c.req.json();
+
+  const updateStatus = await prisma.posts.update({
+    where: {
+      id: postId
+    },
+    data: {
+      status: newStatus
+    }
+  })
+
+
+  return c.json({ updateStatus });
+})
 
 export default app

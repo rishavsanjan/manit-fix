@@ -19,7 +19,8 @@ interface Post {
     Comment: Comment[]
     CommentReactions: CommentReactions[]
     userId: string
-    
+    AdminstrativeComments: AdminstrativeComments[];
+
 }
 
 
@@ -28,7 +29,15 @@ interface CommentReactions {
     commentId: string
     type: string | null
     userId: string
-    createdAt:string
+    createdAt: string
+}
+
+interface AdminstrativeComments {
+    id: string
+    comment: string
+    createdAt: string
+    type: string
+
 }
 
 interface Comment {
@@ -40,7 +49,8 @@ interface Comment {
     CommentReactions: CommentReactions[]
     userId: string
     comment: Comment[]
-    createdAt:string
+    createdAt: string
+
 
 }
 
@@ -48,13 +58,13 @@ interface User {
     id: string
     name: string
     picture: string
-    createdAt:string
+    createdAt: string
 }
 
 interface Replies {
     replies: Replies[]
     comment: Comment[]
-    createdAt:string
+    createdAt: string
 }
 
 export default function PostDetail() {
@@ -494,6 +504,20 @@ export default function PostDetail() {
 
         return 'just now';
     }
+    function formatFullDateTime(isoString: string): string {
+        const date = new Date(isoString);
+
+        const options: Intl.DateTimeFormatOptions = {
+            year: 'numeric',
+            month: 'long', // Full month name
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true // AM/PM
+        };
+
+        return date.toLocaleString('en-US', options);
+    }
 
     return (
         <>
@@ -528,6 +552,33 @@ export default function PostDetail() {
                             <h1 className="text-gray-500">{post?.description}</h1>
                             <img src={post?.image} alt="" />
                         </div>
+                        {
+                            post?.AdminstrativeComments.length === 0 ?
+                                <div className="border-2 p-4 border-dashed border-purple-600 flex flex-col items-center py-8  bg-purple-200 rounded-xl shadow-sm  sm:mx-12 md:mx-32 lg:mx-64 mb-4">
+                                    <p className="text-3xl">🏛️</p>
+                                    <p className="text-sm text-purple-700 font-medium sm:text-lg">Administration has not made any comment yet</p>
+                                    <p className="text-sm text-purple-500 ">Official response pending</p>
+                                </div>
+                                :
+                                <div className="border-2 border-dashed border-purple-600 flex flex-col items-center py-4  bg-purple-200 rounded-xl shadow-sm  sm:mx-12 md:mx-32 lg:mx-64 mb-4">
+                                    <p className="text-sm text-purple-700 font-medium sm:text-lg mb-4">Offical Comment</p>
+                                    {
+                                        post?.AdminstrativeComments.map((item) => {
+                                            return (
+                                                <div className="bg-gray-100 rounded-xl border-l-4 self-stretch ml-8 mr-8 mb-2  border-blue-500 p-3 py-5 gap-2 flex flex-col" key={item.id}>
+                                                    <div className="flex sm:flex-row flex-col justify-between">
+                                                        <h1 className="font-medium">Adminstration</h1>
+                                                        <p>{formatFullDateTime(item.createdAt)}</p>
+                                                    </div>
+                                                    <p>{item.comment}</p>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+
+                        }
+
                         <div className="flex flex-col  border border-gray-200 rounded-xl shadow-sm  sm:mx-12 md:mx-32 lg:mx-64 mb-4">
                             <div className=" p-4 border-b border-b-gray-200">
                                 <h1 className="font-medium text-xl">Discussion</h1>
