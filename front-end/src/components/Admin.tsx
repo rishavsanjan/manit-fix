@@ -3,6 +3,8 @@ import { useEffect, useState } from "react"
 import AdminIssues from "./AdminIssues";
 import { AdminMobileSidebar } from "../modals/AdminMobileSidebar";
 
+
+
 export default function Admin() {
 
     const [isActive, setIsActive] = useState('dashboard');
@@ -15,16 +17,14 @@ export default function Admin() {
                 'Authorization': 'Bearer ' + token
             }
         })
-
         console.log(response.data)
     }
-
 
     useEffect(() => {
         getDashBoardDetails();
     }, []);
     return (
-        <div className="flex h-screen">
+        <div className="flex ">
 
             <div className="xl:w-1/5 w-1/2 bg-gray-800 md:flex flex-col hidden">
 
@@ -63,7 +63,7 @@ export default function Admin() {
                                     <p className="bg-yellow-200 p-2 rounded-xl">⌛</p>
                                 </div>
                                 <div className="mt-4">
-                                    <p className="text-black pb-2 font-bold text-4xl">5</p>
+                                    <p className="text-black pb-2 font-bold text-4xl">+3</p>
                                     <p className="text-green-600 text-md font-bold ">+3 from yesterday</p>
                                 </div>
 

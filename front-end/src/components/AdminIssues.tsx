@@ -45,18 +45,18 @@ export default function AdminIssues() {
     return (
         <div >
             
-            <div className="m-4 border border-gray-200  rounded-xl">
+            <div className="m-4 border border-gray-200  rounded-xl overflow-x-auto">
                 <div className="p-4">
                     <h1 className="text-black font-medium text-xl">Recent Reports</h1>
                 </div>
 
-                <div className="flex flex-row justify-between bg-gray-100 p-4 mb-2">
-                    <div>
-                        <p className="text-gray-600 font-medium">Issue</p>
+                <div className="flex flex-row justify-between bg-gray-100 p-4 mb-2 ">
+                    <div className="sm:flex hidden">
+                        <p>Title</p>
                     </div>
                     <div className="flex w-56 justify-between">
                         <p className="text-gray-600 font-medium">Catogery</p>
-                        <p className="text-gray-600 font-medium mr-2">Status</p>
+                        <p className="text-gray-600 font-medium sm:mr-6 mr-10 ">Status</p>
                     </div>
                     <div>
                         <p className="text-gray-600 font-medium w-20">Time</p>
@@ -69,13 +69,13 @@ export default function AdminIssues() {
                                 <Link to={`/admin/issue-detail/${item.id}`}>
                                     <div className="flex flex-col justify-center cursor-pointer">
                                         <div className="flex flex-row justify-between p-4 mb-2 items-center">
-                                            <div>
-                                                <h1 className="w-20">{item.title}</h1>
+                                            <div className="hidden sm:flex w-20">
+                                                <p>{item.title}</p>
                                             </div>
-                                            <div className="flex flex-row w-56 justify-between items-center ">
-                                                <h1 className="w-20">{item.catogery}</h1>
+                                            <div className="flex flex-row w-60 justify-between items-center ">
+                                                <h1 className="">{item.catogery}</h1>
                                                 <select required
-                                                    className="w-24 border-2 border-gray-300 rounded-lg focus:border-blue-500 outline-none transition-colors duration-300"
+                                                    className="sm:w-24 w-20 mr-4  border-2 border-gray-300 rounded-lg focus:border-blue-500 outline-none transition-colors duration-300"
                                                     defaultValue={item.status}
                                                 >
 

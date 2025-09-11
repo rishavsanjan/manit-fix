@@ -208,6 +208,7 @@ export default function PostDetail() {
         setRepliesLoading(null);
 
     }
+    
     function formatTimeAgo(timestamp: string | undefined) {
         const now = new Date();
         //@ts-ignore

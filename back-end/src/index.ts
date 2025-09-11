@@ -3,7 +3,10 @@ import { getPrisma } from './prismaFunction'
 import { cors } from 'hono/cors'
 import { sign } from 'hono/jwt'
 import { authMiddleware } from './middleware'
+import dotenv from "dotenv";
 
+
+dotenv.config();
 
 
 
@@ -18,14 +21,14 @@ const app = new Hono<{
 }>()
 
 app.use('*', cors({
-  origin: 'http://localhost:5173',
+  origin: 'http://localhost:5174',
   allowHeaders: ['Content-Type', 'Authorization'],
   allowMethods: ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE']
 }))
 
+const JWT_SECRET = process.env.JWT_SECRET;
 
 
-const JWT_SECRET = 'rishav';
 
 app.get('/hello', (c) => {
   return c.text('Hello from Hono + Cloudflare Workers!')
@@ -679,10 +682,10 @@ app.get('/protected/postdetail/:postId', async (c) => {
           }
         }
       },
-      AdminstrativeComments : {
-        where:{
-          type:{
-            in:['public', 'status']
+      AdminstrativeComments: {
+        where: {
+          type: {
+            in: ['public', 'status']
           }
         }
       }
@@ -765,15 +768,15 @@ app.get('/postdetail/:postId', async (c) => {
           }
         }
       },
-      AdminstrativeComments:{
-        where:{
-          postId:id,
-          type:{
-            in:['public', 'status']
+      AdminstrativeComments: {
+        where: {
+          postId: id,
+          type: {
+            in: ['public', 'status']
           }
         }
       }
-      
+
     }
   })
 
@@ -1003,6 +1006,8 @@ app.post('/protected/admin/dashboard', async (c) => {
     }
   })
 
+
+
   return c.json({ dashboard });
 })
 
@@ -1077,6 +1082,13 @@ app.post('/protected/admin/update-status', async (c) => {
 
 
   return c.json({ updateStatus });
+})
+
+app.post('/protected/admin-dashboard', async (c) => {
+  const prisma = getPrisma(c.env.DATABASE_URL);
+  //@ts-ignore
+  const { id: userId } = c.get('user');
+
 })
 
 export default app
